@@ -21,7 +21,10 @@ class NavigatrService {
   }) async {
     final response = await http.post(
       Uri.parse('${config.valhallaUrl}/route'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'navigatr-flutter/1.0',
+      },
       body: jsonEncode({
         'locations': [
           {'lat': origin.lat, 'lon': origin.lng, 'type': 'break'},
@@ -39,27 +42,27 @@ class NavigatrService {
     final data = jsonDecode(response.body);
     final trip = data['trip'];
     final summary = trip['summary'];
-    final shape = trip['legs'][0]['shape'];
-
+    final shape = trip['legs'][0]['shape'] as String? ?? '';
+    
     final polyline = NavigatrPolyline.decode(shape);
-    final int durationSeconds = (summary['time'] as num).toInt();
-    final double distanceKm = (summary['length'] as num).toDouble();
+    final int durationSeconds = (summary['time'] as num?)?.toInt() ?? 0;
+    final double distanceKm = (summary['length'] as num?)?.toDouble() ?? 0.0;
     final int distanceMeters = (distanceKm * 1000).round();
 
     // Parse maneuvers if they exist
     List<Maneuver>? maneuvers;
     if (trip['legs'][0]['maneuvers'] != null) {
       maneuvers = (trip['legs'][0]['maneuvers'] as List).map((m) {
-        final double mLon = (m['lon'] as num).toDouble();
-        final double mLat = (m['lat'] as num).toDouble();
+        final double mLon = (m['lon'] as num?)?.toDouble() ?? 0.0;
+        final double mLat = (m['lat'] as num?)?.toDouble() ?? 0.0;
         
         return Maneuver(
           instruction: m['instruction'] ?? '',
-          type: (m['type'] as int).toString(),
-          distanceMeters: ((m['length'] as num).toDouble() * 1000).round(),
-          distanceText: NavigatrFormat.distance(((m['length'] as num).toDouble() * 1000).round()),
-          durationSeconds: (m['time'] as num).toInt(),
-          durationText: NavigatrFormat.duration((m['time'] as num).toInt()),
+          type: (m['type'] as int?)?.toString() ?? '0',
+          distanceMeters: ((m['length'] as num?)?.toDouble() ?? 0.0 * 1000).round(),
+          distanceText: NavigatrFormat.distance(((m['length'] as num?)?.toDouble() ?? 0.0 * 1000).round()),
+          durationSeconds: (m['time'] as num?)?.toInt() ?? 0,
+          durationText: NavigatrFormat.duration((m['time'] as num?)?.toInt() ?? 0),
           startPoint: NavigatrLatLng(lat: mLat, lng: mLon),
         );
       }).toList();
@@ -119,6 +122,7 @@ class NavigatrService {
   Future<List<AutocompleteResult>> autocomplete(String query, {int limit = 5}) async {
     final response = await http.get(
       Uri.parse('${config.photonUrl}/api?q=${Uri.encodeComponent(query)}&limit=$limit'),
+      headers: {'User-Agent': 'navigatr-flutter/1.0'},
     );
 
     if (response.statusCode != 200) {
@@ -133,8 +137,8 @@ class NavigatrService {
       final coords = f['geometry']['coordinates'];
       
       return AutocompleteResult(
-        lat: (coords[1] as num).toDouble(),
-        lng: (coords[0] as num).toDouble(),
+        lat: (coords[1] as num?)?.toDouble() ?? 0.0,
+        lng: (coords[0] as num?)?.toDouble() ?? 0.0,
         name: props['name'] ?? '',
         displayName: [
           props['name'],
