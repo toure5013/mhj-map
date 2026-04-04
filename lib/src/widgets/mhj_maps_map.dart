@@ -6,15 +6,15 @@ import '../models/lat_lng.dart';
 import '../models/tile_provider.dart';
 import '../models/map_theme.dart';
 
-/// Controller to interact with a [NavigatrMap] widget programmatically.
+/// Controller to interact with a [MhjMapsMap] widget programmatically.
 ///
-/// Obtained via the [NavigatrMap.onMapCreated] callback.
+/// Obtained via the [MhjMapsMap.onMapCreated] callback.
 ///
 /// ```dart
-/// NavigatrMapController? _controller;
+/// MhjMapsMapController? _controller;
 ///
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.85, lng: 2.35),
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
 ///   onMapCreated: (controller) => _controller = controller,
 /// )
 ///
@@ -22,14 +22,14 @@ import '../models/map_theme.dart';
 /// _controller?.addMarker(position: myPos, label: 'Hello');
 /// _controller?.drawRoute(myPolyline, color: Colors.green);
 /// ```
-class NavigatrMapController {
+class MhjMapsMapController {
   late final MapController _mapController;
   final List<Marker> _markers = [];
   final List<Polyline> _polylines = [];
   final List<CircleMarker> _circles = [];
   final Function() _onUpdate;
 
-  NavigatrMapController({
+  MhjMapsMapController({
     required Function() onUpdate,
   }) : _onUpdate = onUpdate {
     _mapController = MapController();
@@ -42,7 +42,7 @@ class NavigatrMapController {
 
   /// Adds a marker at the given position.
   void addMarker({
-    required NavigatrLatLng position,
+    required MhjMapsLatLng position,
     Widget? icon,
     String? label,
     double width = 40,
@@ -64,7 +64,7 @@ class NavigatrMapController {
 
   /// Adds a custom widget marker at the given position.
   void addCustomMarker({
-    required NavigatrLatLng position,
+    required MhjMapsLatLng position,
     required Widget child,
     double width = 80,
     double height = 80,
@@ -84,7 +84,7 @@ class NavigatrMapController {
 
   /// Adds a marker using a local PNG/JPG asset or network URL.
   void addImageMarker({
-    required NavigatrLatLng position,
+    required MhjMapsLatLng position,
     required String imagePath,
     bool isNetwork = false,
     double width = 40,
@@ -107,7 +107,7 @@ class NavigatrMapController {
 
   /// Adds a marker using an SVG (local asset or network).
   void addSvgMarker({
-    required NavigatrLatLng position,
+    required MhjMapsLatLng position,
     required String svgPath,
     bool isNetwork = false,
     Color? color,
@@ -155,7 +155,7 @@ class NavigatrMapController {
 
   /// Draws a route polyline on the map.
   void drawRoute(
-    List<NavigatrLatLng> polyline, {
+    List<MhjMapsLatLng> polyline, {
     Color color = const Color(0xFF00FF94),
     double width = 4.0,
     bool isDotted = false,
@@ -179,7 +179,7 @@ class NavigatrMapController {
 
   /// Draws a dashed route for walking / alternative routes.
   void drawDashedRoute(
-    List<NavigatrLatLng> polyline, {
+    List<MhjMapsLatLng> polyline, {
     Color color = const Color(0xFF94a3b8),
     double width = 3.0,
   }) {
@@ -196,7 +196,7 @@ class NavigatrMapController {
 
   /// Adds a circle overlay on the map.
   void addCircle({
-    required NavigatrLatLng center,
+    required MhjMapsLatLng center,
     required double radiusMeters,
     Color color = const Color(0x303b82f6),
     Color borderColor = const Color(0xFF3b82f6),
@@ -225,7 +225,7 @@ class NavigatrMapController {
 
   /// Fits the camera so the given polyline fits inside the viewport.
   void fitRoute(
-    List<NavigatrLatLng> polyline, {
+    List<MhjMapsLatLng> polyline, {
     EdgeInsets padding = const EdgeInsets.all(50.0),
   }) {
     if (polyline.isEmpty) return;
@@ -259,7 +259,7 @@ class NavigatrMapController {
   }
 
   /// Moves the camera to a specific position.
-  void moveTo(NavigatrLatLng position, {double zoom = 13.0}) {
+  void moveTo(MhjMapsLatLng position, {double zoom = 13.0}) {
     _mapController.move(LatLng(position.lat, position.lng), zoom);
   }
 
@@ -289,7 +289,7 @@ class NavigatrMapController {
   double get currentZoom => _mapController.camera.zoom;
 
   /// Current center of the map.
-  NavigatrLatLng get currentCenter => NavigatrLatLng(
+  MhjMapsLatLng get currentCenter => MhjMapsLatLng(
         lat: _mapController.camera.center.latitude,
         lng: _mapController.camera.center.longitude,
       );
@@ -309,38 +309,38 @@ class NavigatrMapController {
 ///
 /// ## Basic Usage
 /// ```dart
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
 ///   zoom: 13,
 /// )
 /// ```
 ///
 /// ## With a Theme
 /// ```dart
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-///   theme: NavigatrMapThemes.darkElegant,
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+///   theme: MhjMapsMapThemes.darkElegant,
 /// )
 /// ```
 ///
 /// ## With Custom Tile Provider
 /// ```dart
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-///   tileProvider: NavigatrTileProvider.cartoVoyager,
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+///   tileProvider: MhjMapsTileProvider.cartoVoyager,
 /// )
 /// ```
 ///
 /// ## Full Customization
 /// ```dart
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
 ///   zoom: 15,
 ///   minZoom: 4,
 ///   maxZoom: 18,
 ///   showZoomControls: true,
 ///   showAttribution: true,
-///   tileProvider: NavigatrTileProvider.custom(
+///   tileProvider: MhjMapsTileProvider.custom(
 ///     urlTemplate: 'https://mytiles.example.com/{z}/{x}/{y}.png',
 ///     name: 'My Custom Tiles',
 ///   ),
@@ -352,9 +352,9 @@ class NavigatrMapController {
 ///   },
 /// )
 /// ```
-class NavigatrMap extends StatefulWidget {
+class MhjMapsMap extends StatefulWidget {
   /// Initial center of the map.
-  final NavigatrLatLng center;
+  final MhjMapsLatLng center;
 
   /// Initial zoom level (default: 13.0).
   final double zoom;
@@ -375,10 +375,10 @@ class NavigatrMap extends StatefulWidget {
   final String? attribution;
 
   /// A tile provider configuration. Takes priority over [tileUrl].
-  final NavigatrTileProvider? tileProvider;
+  final MhjMapsTileProvider? tileProvider;
 
   /// A complete theme combining tiles + styling. Takes highest priority.
-  final NavigatrMapTheme? theme;
+  final MhjMapsMapTheme? theme;
 
   /// Whether to show zoom controls overlay.
   final bool showZoomControls;
@@ -390,21 +390,21 @@ class NavigatrMap extends StatefulWidget {
   final Color? backgroundColor;
 
   /// Callback when the map is created and the controller is ready.
-  final Function(NavigatrMapController controller)? onMapCreated;
+  final Function(MhjMapsMapController controller)? onMapCreated;
 
   /// Callback when the user taps on the map.
-  final Function(NavigatrLatLng position)? onTap;
+  final Function(MhjMapsLatLng position)? onTap;
 
   /// Callback when the user long-presses on the map.
-  final Function(NavigatrLatLng position)? onLongPress;
+  final Function(MhjMapsLatLng position)? onLongPress;
 
   /// Callback when the camera position changes.
-  final Function(NavigatrLatLng center, double zoom)? onCameraMove;
+  final Function(MhjMapsLatLng center, double zoom)? onCameraMove;
 
   /// Additional layers to render on top of the map.
   final List<Widget>? additionalLayers;
 
-  const NavigatrMap({
+  const MhjMapsMap({
     super.key,
     required this.center,
     this.zoom = 13.0,
@@ -426,16 +426,16 @@ class NavigatrMap extends StatefulWidget {
   });
 
   @override
-  State<NavigatrMap> createState() => _NavigatrMapState();
+  State<MhjMapsMap> createState() => _MhjMapsMapState();
 }
 
-class _NavigatrMapState extends State<NavigatrMap> {
-  late NavigatrMapController _controller;
+class _MhjMapsMapState extends State<MhjMapsMap> {
+  late MhjMapsMapController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = NavigatrMapController(onUpdate: () {
+    _controller = MhjMapsMapController(onUpdate: () {
       if (mounted) setState(() {});
     });
 
@@ -488,7 +488,7 @@ class _NavigatrMapState extends State<NavigatrMap> {
                     : const Color(0xFFE8E8E8)),
             onTap: widget.onTap != null
                 ? (tapPosition, point) {
-                    widget.onTap!(NavigatrLatLng(
+                    widget.onTap!(MhjMapsLatLng(
                       lat: point.latitude,
                       lng: point.longitude,
                     ));
@@ -496,7 +496,7 @@ class _NavigatrMapState extends State<NavigatrMap> {
                 : null,
             onLongPress: widget.onLongPress != null
                 ? (tapPosition, point) {
-                    widget.onLongPress!(NavigatrLatLng(
+                    widget.onLongPress!(MhjMapsLatLng(
                       lat: point.latitude,
                       lng: point.longitude,
                     ));
@@ -508,7 +508,7 @@ class _NavigatrMapState extends State<NavigatrMap> {
                     final zoom = camera.zoom;
                     if (center != null && zoom != null) {
                       widget.onCameraMove!(
-                        NavigatrLatLng(
+                        MhjMapsLatLng(
                           lat: center.latitude,
                           lng: center.longitude,
                         ),
@@ -521,7 +521,7 @@ class _NavigatrMapState extends State<NavigatrMap> {
           children: [
             TileLayer(
               urlTemplate: _resolvedTileUrl,
-              userAgentPackageName: 'dev.navigatr.flutter',
+              userAgentPackageName: 'dev.mhj_maps.flutter',
               subdomains: _resolvedSubdomains,
               maxZoom: _resolvedMaxZoom.toDouble(),
             ),

@@ -1,8 +1,8 @@
 /// A tile provider configuration for the map widget.
 ///
-/// Pre-built providers are available via [NavigatrTileProvider] static methods
+/// Pre-built providers are available via [MhjMapsTileProvider] static methods
 /// for OpenStreetMap, CartoDB, Stadia Maps, and more.
-class NavigatrTileProvider {
+class MhjMapsTileProvider {
   /// Display name for this tile provider.
   final String name;
 
@@ -24,7 +24,7 @@ class NavigatrTileProvider {
   /// A unique identifier for this tile provider.
   final String id;
 
-  const NavigatrTileProvider({
+  const MhjMapsTileProvider({
     required this.id,
     required this.name,
     required this.urlTemplate,
@@ -34,7 +34,7 @@ class NavigatrTileProvider {
     this.isDark = false,
   });
 
-  NavigatrTileProvider copyWith({
+  MhjMapsTileProvider copyWith({
     String? id,
     String? name,
     String? urlTemplate,
@@ -43,7 +43,7 @@ class NavigatrTileProvider {
     int? maxZoom,
     bool? isDark,
   }) {
-    return NavigatrTileProvider(
+    return MhjMapsTileProvider(
       id: id ?? this.id,
       name: name ?? this.name,
       urlTemplate: urlTemplate ?? this.urlTemplate,
@@ -57,7 +57,7 @@ class NavigatrTileProvider {
   // ─── Built-in Tile Providers ────────────────────────────────────────
 
   /// Standard OpenStreetMap tiles.
-  static const NavigatrTileProvider openStreetMap = NavigatrTileProvider(
+  static const MhjMapsTileProvider openStreetMap = MhjMapsTileProvider(
     id: 'osm_standard',
     name: 'OpenStreetMap',
     urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -65,7 +65,7 @@ class NavigatrTileProvider {
   );
 
   /// CartoDB Positron — light, minimalist basemap.
-  static const NavigatrTileProvider cartoPositron = NavigatrTileProvider(
+  static const MhjMapsTileProvider cartoPositron = MhjMapsTileProvider(
     id: 'carto_positron',
     name: 'CartoDB Positron',
     urlTemplate:
@@ -76,7 +76,7 @@ class NavigatrTileProvider {
   );
 
   /// CartoDB Dark Matter — sleek dark basemap.
-  static const NavigatrTileProvider cartoDarkMatter = NavigatrTileProvider(
+  static const MhjMapsTileProvider cartoDarkMatter = MhjMapsTileProvider(
     id: 'carto_dark',
     name: 'CartoDB Dark Matter',
     urlTemplate:
@@ -88,7 +88,7 @@ class NavigatrTileProvider {
   );
 
   /// CartoDB Voyager — colorful, detailed basemap.
-  static const NavigatrTileProvider cartoVoyager = NavigatrTileProvider(
+  static const MhjMapsTileProvider cartoVoyager = MhjMapsTileProvider(
     id: 'carto_voyager',
     name: 'CartoDB Voyager',
     urlTemplate:
@@ -99,7 +99,7 @@ class NavigatrTileProvider {
   );
 
   /// CartoDB Positron (no labels) — clean, minimal, no text.
-  static const NavigatrTileProvider cartoPositronNoLabels = NavigatrTileProvider(
+  static const MhjMapsTileProvider cartoPositronNoLabels = MhjMapsTileProvider(
     id: 'carto_positron_nolabels',
     name: 'CartoDB Positron (No Labels)',
     urlTemplate:
@@ -110,8 +110,8 @@ class NavigatrTileProvider {
   );
 
   /// CartoDB Dark Matter (no labels).
-  static const NavigatrTileProvider cartoDarkMatterNoLabels =
-      NavigatrTileProvider(
+  static const MhjMapsTileProvider cartoDarkMatterNoLabels =
+      MhjMapsTileProvider(
     id: 'carto_dark_nolabels',
     name: 'CartoDB Dark (No Labels)',
     urlTemplate:
@@ -123,7 +123,7 @@ class NavigatrTileProvider {
   );
 
   /// OpenTopoMap — topographic map with contour lines.
-  static const NavigatrTileProvider openTopoMap = NavigatrTileProvider(
+  static const MhjMapsTileProvider openTopoMap = MhjMapsTileProvider(
     id: 'opentopomap',
     name: 'OpenTopoMap',
     urlTemplate: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
@@ -134,7 +134,7 @@ class NavigatrTileProvider {
   );
 
   /// CyclOSM — bicycle-oriented map.
-  static const NavigatrTileProvider cyclOSM = NavigatrTileProvider(
+  static const MhjMapsTileProvider cyclOSM = MhjMapsTileProvider(
     id: 'cyclosm',
     name: 'CyclOSM',
     urlTemplate:
@@ -145,7 +145,7 @@ class NavigatrTileProvider {
   );
 
   /// OSM Humanitarian — emphasizes humanitarian features.
-  static const NavigatrTileProvider humanitarian = NavigatrTileProvider(
+  static const MhjMapsTileProvider humanitarian = MhjMapsTileProvider(
     id: 'humanitarian',
     name: 'Humanitarian (HOT)',
     urlTemplate: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
@@ -155,7 +155,7 @@ class NavigatrTileProvider {
   );
 
   /// Esri World Street Map.
-  static const NavigatrTileProvider esriWorldStreet = NavigatrTileProvider(
+  static const MhjMapsTileProvider esriWorldStreet = MhjMapsTileProvider(
     id: 'esri_street',
     name: 'Esri World Street',
     urlTemplate:
@@ -164,7 +164,7 @@ class NavigatrTileProvider {
   );
 
   /// Esri World Imagery — satellite imagery.
-  static const NavigatrTileProvider esriWorldImagery = NavigatrTileProvider(
+  static const MhjMapsTileProvider esriWorldImagery = MhjMapsTileProvider(
     id: 'esri_imagery',
     name: 'Esri Satellite',
     urlTemplate:
@@ -173,7 +173,7 @@ class NavigatrTileProvider {
   );
 
   /// Esri World Topo Map.
-  static const NavigatrTileProvider esriWorldTopo = NavigatrTileProvider(
+  static const MhjMapsTileProvider esriWorldTopo = MhjMapsTileProvider(
     id: 'esri_topo',
     name: 'Esri Topo',
     urlTemplate:
@@ -182,7 +182,7 @@ class NavigatrTileProvider {
   );
 
   /// Esri Light Gray Canvas — minimal basemap for overlays.
-  static const NavigatrTileProvider esriLightGray = NavigatrTileProvider(
+  static const MhjMapsTileProvider esriLightGray = MhjMapsTileProvider(
     id: 'esri_light_gray',
     name: 'Esri Light Gray',
     urlTemplate:
@@ -191,7 +191,7 @@ class NavigatrTileProvider {
   );
 
   /// Create a custom tile provider from any URL template.
-  factory NavigatrTileProvider.custom({
+  factory MhjMapsTileProvider.custom({
     required String urlTemplate,
     String name = 'Custom',
     String attribution = '',
@@ -199,7 +199,7 @@ class NavigatrTileProvider {
     int maxZoom = 19,
     bool isDark = false,
   }) {
-    return NavigatrTileProvider(
+    return MhjMapsTileProvider(
       id: 'custom_${urlTemplate.hashCode}',
       name: name,
       urlTemplate: urlTemplate,
@@ -211,7 +211,7 @@ class NavigatrTileProvider {
   }
 
   /// Returns all built-in tile providers.
-  static List<NavigatrTileProvider> get allProviders => [
+  static List<MhjMapsTileProvider> get allProviders => [
         openStreetMap,
         cartoPositron,
         cartoDarkMatter,
@@ -228,20 +228,20 @@ class NavigatrTileProvider {
       ];
 
   /// Returns all light-themed tile providers.
-  static List<NavigatrTileProvider> get lightProviders =>
+  static List<MhjMapsTileProvider> get lightProviders =>
       allProviders.where((p) => !p.isDark).toList();
 
   /// Returns all dark-themed tile providers.
-  static List<NavigatrTileProvider> get darkProviders =>
+  static List<MhjMapsTileProvider> get darkProviders =>
       allProviders.where((p) => p.isDark).toList();
 
   @override
-  String toString() => 'NavigatrTileProvider($name)';
+  String toString() => 'MhjMapsTileProvider($name)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NavigatrTileProvider &&
+      other is MhjMapsTileProvider &&
           runtimeType == other.runtimeType &&
           id == other.id;
 

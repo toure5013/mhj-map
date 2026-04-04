@@ -1,12 +1,12 @@
 import 'dart:math';
 import '../models/lat_lng.dart';
 
-class NavigatrPolyline {
+class MhjMapsPolyline {
   /// Decodes an encoded polyline string into an array of coordinates.
   /// Uses the Google polyline encoding algorithm with precision 6 (for Valhalla).
-  static List<NavigatrLatLng> decode(String encoded, {int precision = 6}) {
+  static List<MhjMapsLatLng> decode(String encoded, {int precision = 6}) {
     final factor = pow(10, precision);
-    final List<NavigatrLatLng> coordinates = [];
+    final List<MhjMapsLatLng> coordinates = [];
     int index = 0;
     int lat = 0;
     int lng = 0;
@@ -39,7 +39,7 @@ class NavigatrPolyline {
       final int deltaLng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
       lng += deltaLng;
 
-      coordinates.add(NavigatrLatLng(
+      coordinates.add(MhjMapsLatLng(
         lat: lat / factor,
         lng: lng / factor,
       ));

@@ -1,11 +1,11 @@
-# Navigatr 🗺️
+# Mhj-maps 🗺️
 
-[![pub package](https://img.shields.io/pub/v/navigatr.svg)](https://pub.dev/packages/navigatr)
+[![pub package](https://img.shields.io/pub/v/mhj_maps.svg)](https://pub.dev/packages/mhj_maps)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 **The open-source Maps SDK for Flutter.** Zero API keys, zero cost, high-performance routing, geocoding, and fully customizable map rendering.
 
-Navigatr is a drop-in alternative to Google Maps SDK that uses free, public OpenStreetMap infrastructure — no billing, no quotas, no API keys.
+Mhj-maps is a drop-in alternative to Google Maps SDK that uses free, public OpenStreetMap infrastructure — no billing, no quotas, no API keys.
 
 ---
 
@@ -13,7 +13,7 @@ Navigatr is a drop-in alternative to Google Maps SDK that uses free, public Open
 
 | Feature | Description |
 |---|---|
-| 🗺️ **Map Widget** | Customizable `NavigatrMap` widget powered by `flutter_map` |
+| 🗺️ **Map Widget** | Customizable `MhjMapsMap` widget powered by `flutter_map` |
 | 🎨 **13 Built-in Themes** | Dark, light, satellite, topo, cycling, minimal, and more |
 | 🔌 **13 Tile Providers** | OSM, CartoDB, Esri, OpenTopo, CyclOSM, HOT and others |
 | 🧭 **Routing** | Turn-by-turn routing via Valhalla (auto, bicycle, pedestrian) |
@@ -33,7 +33,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  navigatr: ^1.0.0
+  mhj_maps: ^1.0.0
 ```
 
 Then run:
@@ -49,10 +49,10 @@ flutter pub get
 ### Display a Map
 
 ```dart
-import 'package:navigatr/navigatr.dart';
+import 'package:mhj_maps/mhj_maps.dart';
 
-NavigatrMap(
-  center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
+MhjMapsMap(
+  center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
   zoom: 13,
 )
 ```
@@ -62,20 +62,20 @@ NavigatrMap(
 Choose from **13 built-in themes** with a single parameter:
 
 ```dart
-NavigatrMap(
-  center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-  theme: NavigatrMapThemes.darkElegant,
+MhjMapsMap(
+  center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+  theme: MhjMapsMapThemes.darkElegant,
 )
 ```
 
 ### Calculate a Route
 
 ```dart
-final nav = Navigatr();
+final nav = Mhj-maps();
 
 final route = await nav.route(
-  origin: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-  destination: NavigatrLatLng(lat: 45.7640, lng: 4.8357),
+  origin: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+  destination: MhjMapsLatLng(lat: 45.7640, lng: 4.8357),
 );
 
 print('Duration: ${route.durationText}');  // "4 hrs 32 mins"
@@ -86,47 +86,47 @@ print('Distance: ${route.distanceText}');  // "465.2 km"
 
 ## 🎨 Map Themes
 
-Navigatr ships with **13 ready-to-use themes**. Switch themes at runtime with zero configuration:
+MhjMaps ships with **13 ready-to-use themes**. Switch themes at runtime with zero configuration:
 
 ### Light Themes
 
 | Theme | Description |
 |---|---|
-| `NavigatrMapThemes.standard` | Classic OpenStreetMap look |
-| `NavigatrMapThemes.cleanLight` | Minimalist CartoDB Positron |
-| `NavigatrMapThemes.voyager` | Colorful, detailed — ideal for nav apps |
-| `NavigatrMapThemes.blankCanvas` | No labels — perfect for custom overlays |
-| `NavigatrMapThemes.professional` | Esri World Street — professional cartography |
-| `NavigatrMapThemes.whisper` | Ultra-minimal gray basemap |
+| `MhjMapsMapThemes.standard` | Classic OpenStreetMap look |
+| `MhjMapsMapThemes.cleanLight` | Minimalist CartoDB Positron |
+| `MhjMapsMapThemes.voyager` | Colorful, detailed — ideal for nav apps |
+| `MhjMapsMapThemes.blankCanvas` | No labels — perfect for custom overlays |
+| `MhjMapsMapThemes.professional` | Esri World Street — professional cartography |
+| `MhjMapsMapThemes.whisper` | Ultra-minimal gray basemap |
 
 ### Dark Themes
 
 | Theme | Description |
 |---|---|
-| `NavigatrMapThemes.darkElegant` | Premium dark basemap (CartoDB Dark Matter) |
-| `NavigatrMapThemes.darkSilent` | Dark, no labels — sleek and minimal |
+| `MhjMapsMapThemes.darkElegant` | Premium dark basemap (CartoDB Dark Matter) |
+| `MhjMapsMapThemes.darkSilent` | Dark, no labels — sleek and minimal |
 
 ### Specialty Themes
 
 | Theme | Description |
 |---|---|
-| `NavigatrMapThemes.topographic` | Contour lines and elevation (OpenTopoMap) |
-| `NavigatrMapThemes.cycling` | Bike lanes and cycling routes (CyclOSM) |
-| `NavigatrMapThemes.humanitarianMap` | Critical infrastructure emphasis (HOT) |
-| `NavigatrMapThemes.satellite` | High-res satellite imagery (Esri) |
-| `NavigatrMapThemes.terrain` | Esri topographic with terrain details |
+| `MhjMapsMapThemes.topographic` | Contour lines and elevation (OpenTopoMap) |
+| `MhjMapsMapThemes.cycling` | Bike lanes and cycling routes (CyclOSM) |
+| `MhjMapsMapThemes.humanitarianMap` | Critical infrastructure emphasis (HOT) |
+| `MhjMapsMapThemes.satellite` | High-res satellite imagery (Esri) |
+| `MhjMapsMapThemes.terrain` | Esri topographic with terrain details |
 
 ### Browse Themes Programmatically
 
 ```dart
 // All themes
-final all = NavigatrMapThemes.all;
+final all = MhjMapsMapThemes.all;
 
 // Dark themes only
-final dark = NavigatrMapThemes.dark;
+final dark = MhjMapsMapThemes.dark;
 
 // By category
-final outdoor = NavigatrMapThemes.byCategory(MapThemeCategory.outdoor);
+final outdoor = MhjMapsMapThemes.byCategory(MapThemeCategory.outdoor);
 ```
 
 ---
@@ -137,15 +137,15 @@ Use any of the **13 built-in tile providers** directly, or create your own:
 
 ```dart
 // Use a built-in provider
-NavigatrMap(
+MhjMapsMap(
   center: myCenter,
-  tileProvider: NavigatrTileProvider.cartoVoyager,
+  tileProvider: MhjMapsTileProvider.cartoVoyager,
 )
 
 // Use a custom tile server
-NavigatrMap(
+MhjMapsMap(
   center: myCenter,
-  tileProvider: NavigatrTileProvider.custom(
+  tileProvider: MhjMapsTileProvider.custom(
     urlTemplate: 'https://mytiles.example.com/{z}/{x}/{y}.png',
     name: 'My Custom Tiles',
     attribution: '© My Company',
@@ -157,48 +157,48 @@ NavigatrMap(
 
 | Provider | ID | Style |
 |---|---|---|
-| `NavigatrTileProvider.openStreetMap` | Standard OSM | Light |
-| `NavigatrTileProvider.cartoPositron` | Minimalist light | Light |
-| `NavigatrTileProvider.cartoDarkMatter` | Sleek dark | Dark |
-| `NavigatrTileProvider.cartoVoyager` | Colorful & detailed | Light |
-| `NavigatrTileProvider.cartoPositronNoLabels` | Clean, no text | Light |
-| `NavigatrTileProvider.cartoDarkMatterNoLabels` | Dark, no text | Dark |
-| `NavigatrTileProvider.openTopoMap` | Topographic | Light |
-| `NavigatrTileProvider.cyclOSM` | Cycling | Light |
-| `NavigatrTileProvider.humanitarian` | HOT | Light |
-| `NavigatrTileProvider.esriWorldStreet` | Professional | Light |
-| `NavigatrTileProvider.esriWorldImagery` | Satellite | — |
-| `NavigatrTileProvider.esriWorldTopo` | Terrain | Light |
-| `NavigatrTileProvider.esriLightGray` | Ultra-minimal | Light |
+| `MhjMapsTileProvider.openStreetMap` | Standard OSM | Light |
+| `MhjMapsTileProvider.cartoPositron` | Minimalist light | Light |
+| `MhjMapsTileProvider.cartoDarkMatter` | Sleek dark | Dark |
+| `MhjMapsTileProvider.cartoVoyager` | Colorful & detailed | Light |
+| `MhjMapsTileProvider.cartoPositronNoLabels` | Clean, no text | Light |
+| `MhjMapsTileProvider.cartoDarkMatterNoLabels` | Dark, no text | Dark |
+| `MhjMapsTileProvider.openTopoMap` | Topographic | Light |
+| `MhjMapsTileProvider.cyclOSM` | Cycling | Light |
+| `MhjMapsTileProvider.humanitarian` | HOT | Light |
+| `MhjMapsTileProvider.esriWorldStreet` | Professional | Light |
+| `MhjMapsTileProvider.esriWorldImagery` | Satellite | — |
+| `MhjMapsTileProvider.esriWorldTopo` | Terrain | Light |
+| `MhjMapsTileProvider.esriLightGray` | Ultra-minimal | Light |
 
 ---
 
 ## 🎮 Map Controller
 
-The `NavigatrMapController` gives you full programmatic control:
+The `MhjMapsMapController` gives you full programmatic control:
 
 ```dart
-NavigatrMapController? _controller;
+MhjMapsMapController? _controller;
 
-NavigatrMap(
-  center: NavigatrLatLng(lat: 48.85, lng: 2.35),
+MhjMapsMap(
+  center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
   onMapCreated: (controller) => _controller = controller,
 )
 ```
 
 ### Markers
 
-Navigatr provides robust helpers to add any kind of marker to your map:
+MhjMaps provides robust helpers to add any kind of marker to your map:
 
 ```dart
 // 1. Basic Icon Marker
 _controller.addMarker(
-  position: NavigatrLatLng(lat: 48.85, lng: 2.35),
+  position: MhjMapsLatLng(lat: 48.85, lng: 2.35),
   icon: Icon(Icons.location_on, color: Colors.red, size: 40),
 );
 
 // 2. SVG Marker (Local or Network)
-// Navigatr has native flutter_svg support. You can even tint SVGs dynamically!
+// MhjMaps has native flutter_svg support. You can even tint SVGs dynamically!
 _controller.addSvgMarker(
   position: myPos,
   svgPath: 'assets/icons/pin.svg', // or 'https://...'
@@ -254,7 +254,7 @@ _controller.clearRoute();
 
 ```dart
 _controller.addCircle(
-  center: NavigatrLatLng(lat: 48.85, lng: 2.35),
+  center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
   radiusMeters: 500,
   color: Colors.blue.withOpacity(0.2),
   borderColor: Colors.blue,
@@ -264,7 +264,7 @@ _controller.addCircle(
 ### Camera Control
 
 ```dart
-_controller.moveTo(NavigatrLatLng(lat: 48.85, lng: 2.35), zoom: 15);
+_controller.moveTo(MhjMapsLatLng(lat: 48.85, lng: 2.35), zoom: 15);
 _controller.zoomIn();
 _controller.zoomOut();
 _controller.rotateTo(45);
@@ -284,7 +284,7 @@ print(_controller.currentCenter);
 ### Forward Geocoding
 
 ```dart
-final nav = Navigatr();
+final nav = MhjMaps();
 final result = await nav.geocode('Tour Eiffel, Paris');
 print('${result.lat}, ${result.lng}');  // 48.8584, 2.2945
 print(result.displayName);
@@ -316,8 +316,8 @@ for (final s in suggestions) {
 
 ```dart
 final route = await nav.route(
-  origin: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-  destination: NavigatrLatLng(lat: 45.7640, lng: 4.8357),
+  origin: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+  destination: MhjMapsLatLng(lat: 45.7640, lng: 4.8357),
   costing: 'auto',  // 'auto', 'bicycle', 'pedestrian'
 );
 
@@ -338,7 +338,7 @@ for (final step in route.maneuvers ?? []) {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:navigatr/navigatr.dart';
+import 'package:mhj_maps/mhj_maps.dart';
 
 class MyMapScreen extends StatefulWidget {
   @override
@@ -346,16 +346,16 @@ class MyMapScreen extends StatefulWidget {
 }
 
 class _MyMapScreenState extends State<MyMapScreen> {
-  final nav = Navigatr();
-  NavigatrMapController? _controller;
+  final nav = MhjMaps();
+  MhjMapsMapController? _controller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NavigatrMap(
-        center: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
+      body: MhjMapsMap(
+        center: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
         zoom: 13,
-        theme: NavigatrMapThemes.darkElegant,
+        theme: MhjMapsMapThemes.darkElegant,
         showZoomControls: true,
         onMapCreated: (controller) => _controller = controller,
         onTap: (position) async {
@@ -374,8 +374,8 @@ class _MyMapScreenState extends State<MyMapScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final route = await nav.route(
-            origin: NavigatrLatLng(lat: 48.8566, lng: 2.3522),
-            destination: NavigatrLatLng(lat: 48.8738, lng: 2.2950),
+            origin: MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
+            destination: MhjMapsLatLng(lat: 48.8738, lng: 2.2950),
           );
           _controller?.drawRoute(route.polyline);
           _controller?.fitRoute(route.polyline);
@@ -391,7 +391,7 @@ class _MyMapScreenState extends State<MyMapScreen> {
 
 ## 🏗 Architecture
 
-Navigatr uses a **distributed client-side architecture**. All requests go directly from the user's device to free public OpenStreetMap infrastructure:
+MhjMaps uses a **distributed client-side architecture**. All requests go directly from the user's device to free public OpenStreetMap infrastructure:
 
 | Service | Provider | Purpose |
 |---|---|---|
@@ -411,8 +411,8 @@ Navigatr uses a **distributed client-side architecture**. All requests go direct
 If you host your own Valhalla/Nominatim/Photon instances:
 
 ```dart
-final nav = Navigatr(
-  config: NavigatrConfig(
+final nav = MhjMaps(
+  config: MhjMapsConfig(
     valhallaUrl: 'https://my-valhalla.example.com',
     nominatimUrl: 'https://my-nominatim.example.com',
     photonUrl: 'https://my-photon.example.com',
@@ -424,17 +424,17 @@ final nav = Navigatr(
 
 ## 📋 API Reference
 
-### NavigatrMap
+### MhjMapsMap
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `center` | `NavigatrLatLng` | **required** | Initial center |
+| `center` | `MhjMapsLatLng` | **required** | Initial center |
 | `zoom` | `double` | `13.0` | Initial zoom |
 | `minZoom` | `double` | `1.0` | Minimum zoom |
 | `maxZoom` | `double` | `19.0` | Maximum zoom |
 | `rotation` | `double` | `0.0` | Initial rotation |
-| `theme` | `NavigatrMapTheme?` | `null` | Complete theme |
-| `tileProvider` | `NavigatrTileProvider?` | `null` | Tile provider |
+| `theme` | `MhjMapsMapTheme?` | `null` | Complete theme |
+| `tileProvider` | `MhjMapsTileProvider?` | `null` | Tile provider |
 | `tileUrl` | `String?` | OSM | Tile URL template |
 | `showZoomControls` | `bool` | `false` | Show +/- buttons |
 | `showAttribution` | `bool` | `true` | Show attribution |
@@ -448,7 +448,7 @@ final nav = Navigatr(
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [contributing guide](https://github.com/touresouleymane/navigatr/blob/main/CONTRIBUTING.md) before submitting a PR.
+Contributions are welcome! Please read our [contributing guide](https://github.com/touresouleymane/mhj_maps/blob/main/CONTRIBUTING.md) before submitting a PR.
 
 ## 📄 License
 
@@ -456,4 +456,4 @@ Apache 2.0 — see [LICENSE](LICENSE) for details.
 
 ---
 
-**Built with ❤️ by [Navigatr](https://navigatr.dev)**
+**Built with ❤️ by [MhjMaps](https://mhj_maps.dev)**

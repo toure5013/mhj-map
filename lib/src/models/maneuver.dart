@@ -7,7 +7,7 @@ class Maneuver {
   final String distanceText;
   final int durationSeconds;
   final String durationText;
-  final NavigatrLatLng startPoint;
+  final MhjMapsLatLng startPoint;
 
   const Maneuver({
     required this.instruction,
@@ -27,7 +27,7 @@ class Maneuver {
       distanceText: json['distanceText'] ?? '',
       durationSeconds: (json['durationSeconds'] as num).toInt(),
       durationText: json['durationText'] ?? '',
-      startPoint: NavigatrLatLng.fromJson(json['startPoint']),
+      startPoint: MhjMapsLatLng.fromJson(json['startPoint']),
     );
   }
 }

@@ -3,16 +3,16 @@ import 'package:mhj_maps/mhj_maps.dart';
 import 'dart:ui';
 
 void main() {
-  runApp(const NavigatrExampleApp());
+  runApp(const MhjMapsExampleApp());
 }
 
-class NavigatrExampleApp extends StatelessWidget {
-  const NavigatrExampleApp({super.key});
+class MhjMapsExampleApp extends StatelessWidget {
+  const MhjMapsExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigatr Example',
+      title: 'MhjMaps Example',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -35,8 +35,8 @@ class MapExampleScreen extends StatefulWidget {
 }
 
 class _MapExampleScreenState extends State<MapExampleScreen> {
-  final Navigatr _navigatr = Navigatr();
-  NavigatrMapController? _mapController;
+  final MhjMaps _mhjMaps = MhjMaps();
+  MhjMapsMapController? _mapController;
 
   final TextEditingController _originController = TextEditingController(
     text: 'Paris, France',
@@ -52,37 +52,37 @@ class _MapExampleScreenState extends State<MapExampleScreen> {
   RouteResult? _routeResult;
 
   // ─── Map Customization ────────────────────────────────────────────
-  NavigatrMapTheme _currentTheme = NavigatrMapThemes.standard;
+  MhjMapsMapTheme _currentTheme = MhjMapsMapThemes.standard;
   bool _showThemePicker = false;
 
   Future<void> _calculateRoute() async {
     setState(() => _isLoading = true);
     try {
-      final NavigatrLatLng originCoords;
+      final MhjMapsLatLng originCoords;
       if (_selectedOrigin != null &&
           _selectedOrigin!.displayName == _originController.text) {
-        originCoords = NavigatrLatLng(
+        originCoords = MhjMapsLatLng(
           lat: _selectedOrigin!.lat,
           lng: _selectedOrigin!.lng,
         );
       } else {
-        final origin = await _navigatr.geocode(_originController.text);
-        originCoords = NavigatrLatLng(lat: origin.lat, lng: origin.lng);
+        final origin = await _mhjMaps.geocode(_originController.text);
+        originCoords = MhjMapsLatLng(lat: origin.lat, lng: origin.lng);
       }
 
-      final NavigatrLatLng destCoords;
+      final MhjMapsLatLng destCoords;
       if (_selectedDestination != null &&
           _selectedDestination!.displayName == _destController.text) {
-        destCoords = NavigatrLatLng(
+        destCoords = MhjMapsLatLng(
           lat: _selectedDestination!.lat,
           lng: _selectedDestination!.lng,
         );
       } else {
-        final dest = await _navigatr.geocode(_destController.text);
-        destCoords = NavigatrLatLng(lat: dest.lat, lng: dest.lng);
+        final dest = await _mhjMaps.geocode(_destController.text);
+        destCoords = MhjMapsLatLng(lat: dest.lat, lng: dest.lng);
       }
 
-      final result = await _navigatr.route(
+      final result = await _mhjMaps.route(
         origin: originCoords,
         destination: destCoords,
       );
@@ -153,7 +153,7 @@ class _MapExampleScreenState extends State<MapExampleScreen> {
     return Color(int.parse(hex, radix: 16));
   }
 
-  void _onThemeSelected(NavigatrMapTheme theme) {
+  void _onThemeSelected(MhjMapsMapTheme theme) {
     setState(() {
       _currentTheme = theme;
       _showThemePicker = false;
@@ -166,9 +166,9 @@ class _MapExampleScreenState extends State<MapExampleScreen> {
       body: Stack(
         children: [
           // ─── The Map (with theme) ─────────────────────────────────
-          NavigatrMap(
+          MhjMapsMap(
             key: ValueKey(_currentTheme.id),
-            center: const NavigatrLatLng(lat: 48.8566, lng: 2.3522),
+            center: const MhjMapsLatLng(lat: 48.8566, lng: 2.3522),
             zoom: 12,
             theme: _currentTheme,
             showZoomControls: true,
@@ -408,9 +408,9 @@ class _MapExampleScreenState extends State<MapExampleScreen> {
         height: 340,
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: NavigatrMapThemes.all.length,
+          itemCount: MhjMapsMapThemes.all.length,
           itemBuilder: (context, index) {
-            final theme = NavigatrMapThemes.all[index];
+            final theme = MhjMapsMapThemes.all[index];
             final isSelected = theme.id == _currentTheme.id;
 
             return InkWell(
@@ -542,7 +542,7 @@ class _MapExampleScreenState extends State<MapExampleScreen> {
         if (textEditingValue.text.isEmpty) {
           return const Iterable<AutocompleteResult>.empty();
         }
-        return await _navigatr.autocomplete(textEditingValue.text);
+        return await _mhjMaps.autocomplete(textEditingValue.text);
       },
       onSelected: (AutocompleteResult selection) {
         controller.text = selection.displayName;

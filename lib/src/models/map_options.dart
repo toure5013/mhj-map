@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'lat_lng.dart';
 
-/// Comprehensive options for configuring a [NavigatrMap] widget.
+/// Comprehensive options for configuring a [MhjMapsMap] widget.
 ///
 /// ```dart
-/// NavigatrMap(
-///   options: NavigatrMapOptions(
-///     center: NavigatrLatLng(lat: 48.85, lng: 2.35),
+/// MhjMapsMap(
+///   options: MhjMapsMapOptions(
+///     center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
 ///     zoom: 13,
 ///     minZoom: 4,
 ///     maxZoom: 18,
-///     interactiveFlags: NavigatrInteractiveFlags.all,
+///     interactiveFlags: MhjMapsInteractiveFlags.all,
 ///   ),
 /// )
 /// ```
-class NavigatrMapOptions {
+class MhjMapsMapOptions {
   /// Initial center of the map.
-  final NavigatrLatLng center;
+  final MhjMapsLatLng center;
 
   /// Initial zoom level.
   final double zoom;
@@ -43,7 +43,7 @@ class NavigatrMapOptions {
   final Color backgroundColor;
 
   /// Optional bounding box to constrain the camera.
-  final NavigatrBounds? maxBounds;
+  final MhjMapsBounds? maxBounds;
 
   /// Whether to show zoom controls as an overlay.
   final bool showZoomControls;
@@ -58,16 +58,16 @@ class NavigatrMapOptions {
   final bool showScale;
 
   /// Position of the attribution widget.
-  final NavigatrAttributionPosition attributionPosition;
+  final MhjMapsAttributionPosition attributionPosition;
 
-  const NavigatrMapOptions({
+  const MhjMapsMapOptions({
     required this.center,
     this.zoom = 13.0,
     this.minZoom = 1.0,
     this.maxZoom = 19.0,
     this.rotation = 0.0,
     this.interactive = true,
-    this.interactiveFlags = NavigatrInteractiveFlags.all,
+    this.interactiveFlags = MhjMapsInteractiveFlags.all,
     this.keepAlive = true,
     this.backgroundColor = const Color(0xFFE8E8E8),
     this.maxBounds,
@@ -75,11 +75,11 @@ class NavigatrMapOptions {
     this.showCompass = false,
     this.showUserLocation = false,
     this.showScale = false,
-    this.attributionPosition = NavigatrAttributionPosition.bottomRight,
+    this.attributionPosition = MhjMapsAttributionPosition.bottomRight,
   });
 
-  NavigatrMapOptions copyWith({
-    NavigatrLatLng? center,
+  MhjMapsMapOptions copyWith({
+    MhjMapsLatLng? center,
     double? zoom,
     double? minZoom,
     double? maxZoom,
@@ -88,14 +88,14 @@ class NavigatrMapOptions {
     int? interactiveFlags,
     bool? keepAlive,
     Color? backgroundColor,
-    NavigatrBounds? maxBounds,
+    MhjMapsBounds? maxBounds,
     bool? showZoomControls,
     bool? showCompass,
     bool? showUserLocation,
     bool? showScale,
-    NavigatrAttributionPosition? attributionPosition,
+    MhjMapsAttributionPosition? attributionPosition,
   }) {
-    return NavigatrMapOptions(
+    return MhjMapsMapOptions(
       center: center ?? this.center,
       zoom: zoom ?? this.zoom,
       minZoom: minZoom ?? this.minZoom,
@@ -116,18 +116,18 @@ class NavigatrMapOptions {
 }
 
 /// Bounding box constraints for the map camera.
-class NavigatrBounds {
-  final NavigatrLatLng southWest;
-  final NavigatrLatLng northEast;
+class MhjMapsBounds {
+  final MhjMapsLatLng southWest;
+  final MhjMapsLatLng northEast;
 
-  const NavigatrBounds({
+  const MhjMapsBounds({
     required this.southWest,
     required this.northEast,
   });
 }
 
 /// Flags to control which interactive gestures are enabled.
-class NavigatrInteractiveFlags {
+class MhjMapsInteractiveFlags {
   static const int none = 0;
   static const int drag = 1 << 0;
   static const int flingAnimation = 1 << 1;
@@ -152,7 +152,7 @@ class NavigatrInteractiveFlags {
 }
 
 /// Where to position the attribution text on the map.
-enum NavigatrAttributionPosition {
+enum MhjMapsAttributionPosition {
   bottomLeft,
   bottomRight,
   topLeft,

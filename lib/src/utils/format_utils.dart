@@ -1,4 +1,4 @@
-class NavigatrFormat {
+class MhjMapsFormat {
   static String duration(int seconds) {
     final totalMinutes = (seconds / 60).round();
 

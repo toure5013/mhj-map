@@ -1,8 +1,8 @@
-class NavigatrLatLng {
+class MhjMapsLatLng {
   final double lat;
   final double lng;
 
-  const NavigatrLatLng({
+  const MhjMapsLatLng({
     required this.lat,
     required this.lng,
   });
@@ -12,20 +12,20 @@ class NavigatrLatLng {
     'lng': lng,
   };
 
-  factory NavigatrLatLng.fromJson(Map<String, dynamic> json) {
-    return NavigatrLatLng(
+  factory MhjMapsLatLng.fromJson(Map<String, dynamic> json) {
+    return MhjMapsLatLng(
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
     );
   }
 
   @override
-  String toString() => 'NavigatrLatLng(lat: $lat, lng: $lng)';
+  String toString() => 'MhjMapsLatLng(lat: $lat, lng: $lng)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NavigatrLatLng &&
+      other is MhjMapsLatLng &&
           runtimeType == other.runtimeType &&
           lat == other.lat &&
           lng == other.lng;

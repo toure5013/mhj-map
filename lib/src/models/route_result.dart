@@ -6,7 +6,7 @@ class RouteResult {
   final String durationText;
   final int distanceMeters;
   final String distanceText;
-  final List<NavigatrLatLng> polyline;
+  final List<MhjMapsLatLng> polyline;
   final List<Maneuver>? maneuvers;
   final List<AlternateRoute>? alternates;
 
@@ -26,7 +26,7 @@ class AlternateRoute {
   final String durationText;
   final int distanceMeters;
   final String distanceText;
-  final List<NavigatrLatLng> polyline;
+  final List<MhjMapsLatLng> polyline;
 
   const AlternateRoute({
     required this.durationSeconds,

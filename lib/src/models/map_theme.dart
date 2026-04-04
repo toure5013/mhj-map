@@ -5,22 +5,22 @@ import 'tile_provider.dart';
 /// Each theme provides a complete, ready-to-use map appearance.
 ///
 /// ```dart
-/// NavigatrMap(
-///   center: NavigatrLatLng(lat: 48.85, lng: 2.35),
-///   theme: NavigatrMapThemes.darkElegant,
+/// MhjMapsMap(
+///   center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
+///   theme: MhjMapsMapThemes.darkElegant,
 /// )
 /// ```
-class NavigatrMapThemes {
-  NavigatrMapThemes._();
+class MhjMapsMapThemes {
+  MhjMapsMapThemes._();
 
   // ─── Light Themes ───────────────────────────────────────────────────
 
   /// Default OSM look — familiar and detailed.
-  static const NavigatrMapTheme standard = NavigatrMapTheme(
+  static const MhjMapsMapTheme standard = MhjMapsMapTheme(
     id: 'standard',
     name: 'Standard',
     description: 'Classic OpenStreetMap style with full details.',
-    tileProvider: NavigatrTileProvider.openStreetMap,
+    tileProvider: MhjMapsTileProvider.openStreetMap,
     polylineColor: '#3b82f6',
     markerColor: '#3b82f6',
     isDark: false,
@@ -28,11 +28,11 @@ class NavigatrMapThemes {
   );
 
   /// Clean, light cartography — perfect for data overlays.
-  static const NavigatrMapTheme cleanLight = NavigatrMapTheme(
+  static const MhjMapsMapTheme cleanLight = MhjMapsMapTheme(
     id: 'clean_light',
     name: 'Clean Light',
     description: 'Minimalist light basemap ideal for data visualization.',
-    tileProvider: NavigatrTileProvider.cartoPositron,
+    tileProvider: MhjMapsTileProvider.cartoPositron,
     polylineColor: '#6366f1',
     markerColor: '#6366f1',
     isDark: false,
@@ -40,11 +40,11 @@ class NavigatrMapThemes {
   );
 
   /// Colorful and detailed — good for navigation apps.
-  static const NavigatrMapTheme voyager = NavigatrMapTheme(
+  static const MhjMapsMapTheme voyager = MhjMapsMapTheme(
     id: 'voyager',
     name: 'Voyager',
     description: 'Colorful, detailed map for exploration and navigation.',
-    tileProvider: NavigatrTileProvider.cartoVoyager,
+    tileProvider: MhjMapsTileProvider.cartoVoyager,
     polylineColor: '#2563eb',
     markerColor: '#ef4444',
     isDark: false,
@@ -52,11 +52,11 @@ class NavigatrMapThemes {
   );
 
   /// Clean base without text — great for custom overlays.
-  static const NavigatrMapTheme blankCanvas = NavigatrMapTheme(
+  static const MhjMapsMapTheme blankCanvas = MhjMapsMapTheme(
     id: 'blank_canvas',
     name: 'Blank Canvas',
     description: 'No labels, clean canvas for custom overlays.',
-    tileProvider: NavigatrTileProvider.cartoPositronNoLabels,
+    tileProvider: MhjMapsTileProvider.cartoPositronNoLabels,
     polylineColor: '#000000',
     markerColor: '#ef4444',
     isDark: false,
@@ -64,11 +64,11 @@ class NavigatrMapThemes {
   );
 
   /// Esri professional street map.
-  static const NavigatrMapTheme professional = NavigatrMapTheme(
+  static const MhjMapsMapTheme professional = MhjMapsMapTheme(
     id: 'professional',
     name: 'Professional',
     description: 'Esri World Street Map — professional cartography.',
-    tileProvider: NavigatrTileProvider.esriWorldStreet,
+    tileProvider: MhjMapsTileProvider.esriWorldStreet,
     polylineColor: '#0ea5e9',
     markerColor: '#0ea5e9',
     isDark: false,
@@ -76,11 +76,11 @@ class NavigatrMapThemes {
   );
 
   /// Esri light gray — ultra minimal.
-  static const NavigatrMapTheme whisper = NavigatrMapTheme(
+  static const MhjMapsMapTheme whisper = MhjMapsMapTheme(
     id: 'whisper',
     name: 'Whisper',
     description: 'Ultra-minimal gray basemap for subtle backgrounds.',
-    tileProvider: NavigatrTileProvider.esriLightGray,
+    tileProvider: MhjMapsTileProvider.esriLightGray,
     polylineColor: '#1e293b',
     markerColor: '#e11d48',
     isDark: false,
@@ -90,11 +90,11 @@ class NavigatrMapThemes {
   // ─── Dark Themes ────────────────────────────────────────────────────
 
   /// Sleek dark map — modern and premium.
-  static const NavigatrMapTheme darkElegant = NavigatrMapTheme(
+  static const MhjMapsMapTheme darkElegant = MhjMapsMapTheme(
     id: 'dark_elegant',
     name: 'Dark Elegant',
     description: 'Premium dark basemap for modern applications.',
-    tileProvider: NavigatrTileProvider.cartoDarkMatter,
+    tileProvider: MhjMapsTileProvider.cartoDarkMatter,
     polylineColor: '#00FF94',
     markerColor: '#00FF94',
     isDark: true,
@@ -102,11 +102,11 @@ class NavigatrMapThemes {
   );
 
   /// Dark map without labels.
-  static const NavigatrMapTheme darkSilent = NavigatrMapTheme(
+  static const MhjMapsMapTheme darkSilent = MhjMapsMapTheme(
     id: 'dark_silent',
     name: 'Dark Silent',
     description: 'Dark basemap without labels — sleek and minimal.',
-    tileProvider: NavigatrTileProvider.cartoDarkMatterNoLabels,
+    tileProvider: MhjMapsTileProvider.cartoDarkMatterNoLabels,
     polylineColor: '#818cf8',
     markerColor: '#fbbf24',
     isDark: true,
@@ -116,11 +116,11 @@ class NavigatrMapThemes {
   // ─── Specialty Themes ───────────────────────────────────────────────
 
   /// Topographic — shows elevation and contour lines.
-  static const NavigatrMapTheme topographic = NavigatrMapTheme(
+  static const MhjMapsMapTheme topographic = MhjMapsMapTheme(
     id: 'topographic',
     name: 'Topographic',
     description: 'Contour lines and elevation data for outdoor use.',
-    tileProvider: NavigatrTileProvider.openTopoMap,
+    tileProvider: MhjMapsTileProvider.openTopoMap,
     polylineColor: '#dc2626',
     markerColor: '#dc2626',
     isDark: false,
@@ -128,11 +128,11 @@ class NavigatrMapThemes {
   );
 
   /// Cycling optimized.
-  static const NavigatrMapTheme cycling = NavigatrMapTheme(
+  static const MhjMapsMapTheme cycling = MhjMapsMapTheme(
     id: 'cycling',
     name: 'Cycling',
     description: 'Optimized for cyclists with bike lanes and routes.',
-    tileProvider: NavigatrTileProvider.cyclOSM,
+    tileProvider: MhjMapsTileProvider.cyclOSM,
     polylineColor: '#16a34a',
     markerColor: '#16a34a',
     isDark: false,
@@ -140,11 +140,11 @@ class NavigatrMapThemes {
   );
 
   /// Humanitarian map — emphasis on essential infrastructure.
-  static const NavigatrMapTheme humanitarianMap = NavigatrMapTheme(
+  static const MhjMapsMapTheme humanitarianMap = MhjMapsMapTheme(
     id: 'humanitarian',
     name: 'Humanitarian',
     description: 'Emphasizes critical infrastructure and humanitarian data.',
-    tileProvider: NavigatrTileProvider.humanitarian,
+    tileProvider: MhjMapsTileProvider.humanitarian,
     polylineColor: '#dc2626',
     markerColor: '#dc2626',
     isDark: false,
@@ -152,11 +152,11 @@ class NavigatrMapThemes {
   );
 
   /// Satellite imagery.
-  static const NavigatrMapTheme satellite = NavigatrMapTheme(
+  static const MhjMapsMapTheme satellite = MhjMapsMapTheme(
     id: 'satellite',
     name: 'Satellite',
     description: 'High-resolution satellite imagery from Esri.',
-    tileProvider: NavigatrTileProvider.esriWorldImagery,
+    tileProvider: MhjMapsTileProvider.esriWorldImagery,
     polylineColor: '#fbbf24',
     markerColor: '#fbbf24',
     isDark: true,
@@ -164,11 +164,11 @@ class NavigatrMapThemes {
   );
 
   /// Esri topographic.
-  static const NavigatrMapTheme terrain = NavigatrMapTheme(
+  static const MhjMapsMapTheme terrain = MhjMapsMapTheme(
     id: 'terrain',
     name: 'Terrain',
     description: 'Esri topographic map with terrain details.',
-    tileProvider: NavigatrTileProvider.esriWorldTopo,
+    tileProvider: MhjMapsTileProvider.esriWorldTopo,
     polylineColor: '#2563eb',
     markerColor: '#ef4444',
     isDark: false,
@@ -176,7 +176,7 @@ class NavigatrMapThemes {
   );
 
   /// Returns all available built-in themes.
-  static List<NavigatrMapTheme> get all => [
+  static List<MhjMapsMapTheme> get all => [
         standard,
         cleanLight,
         voyager,
@@ -193,20 +193,20 @@ class NavigatrMapThemes {
       ];
 
   /// Returns themes filtered by category.
-  static List<NavigatrMapTheme> byCategory(MapThemeCategory category) =>
+  static List<MhjMapsMapTheme> byCategory(MapThemeCategory category) =>
       all.where((t) => t.category == category).toList();
 
   /// Light themes only.
-  static List<NavigatrMapTheme> get light =>
+  static List<MhjMapsMapTheme> get light =>
       all.where((t) => !t.isDark).toList();
 
   /// Dark themes only.
-  static List<NavigatrMapTheme> get dark =>
+  static List<MhjMapsMapTheme> get dark =>
       all.where((t) => t.isDark).toList();
 }
 
 /// A complete map theme combining tiles + styling.
-class NavigatrMapTheme {
+class MhjMapsMapTheme {
   /// Unique identifier.
   final String id;
 
@@ -217,7 +217,7 @@ class NavigatrMapTheme {
   final String description;
 
   /// The tile provider (defines the basemap look).
-  final NavigatrTileProvider tileProvider;
+  final MhjMapsTileProvider tileProvider;
 
   /// Default polyline color (hex string).
   final String polylineColor;
@@ -231,7 +231,7 @@ class NavigatrMapTheme {
   /// Category for filtering.
   final MapThemeCategory category;
 
-  const NavigatrMapTheme({
+  const MhjMapsMapTheme({
     required this.id,
     required this.name,
     required this.description,
@@ -242,17 +242,17 @@ class NavigatrMapTheme {
     this.category = MapThemeCategory.general,
   });
 
-  NavigatrMapTheme copyWith({
+  MhjMapsMapTheme copyWith({
     String? id,
     String? name,
     String? description,
-    NavigatrTileProvider? tileProvider,
+    MhjMapsTileProvider? tileProvider,
     String? polylineColor,
     String? markerColor,
     bool? isDark,
     MapThemeCategory? category,
   }) {
-    return NavigatrMapTheme(
+    return MhjMapsMapTheme(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -265,12 +265,12 @@ class NavigatrMapTheme {
   }
 
   @override
-  String toString() => 'NavigatrMapTheme($name)';
+  String toString() => 'MhjMapsMapTheme($name)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NavigatrMapTheme &&
+      other is MhjMapsMapTheme &&
           runtimeType == other.runtimeType &&
           id == other.id;
 

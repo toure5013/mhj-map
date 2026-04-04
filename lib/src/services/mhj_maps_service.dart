@@ -5,25 +5,25 @@ import '../models/route_result.dart';
 import '../models/geocode_result.dart';
 import '../models/autocomplete_result.dart';
 import '../models/maneuver.dart';
-import '../models/navigatr_config.dart';
+import '../models/mhj_maps_config.dart';
 import '../utils/polyline_decoder.dart';
 import '../utils/format_utils.dart';
 
-class NavigatrService {
-  final NavigatrConfig config;
+class MhjMapsService {
+  final MhjMapsConfig config;
 
-  NavigatrService({this.config = const NavigatrConfig()});
+  MhjMapsService({this.config = const MhjMapsConfig()});
 
   Future<RouteResult> route({
-    required NavigatrLatLng origin,
-    required NavigatrLatLng destination,
+    required MhjMapsLatLng origin,
+    required MhjMapsLatLng destination,
     String costing = 'auto',
   }) async {
     final response = await http.post(
       Uri.parse('${config.valhallaUrl}/route'),
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'navigatr-flutter/1.0',
+        'User-Agent': 'mhj_maps-flutter/1.0',
       },
       body: jsonEncode({
         'locations': [
@@ -44,7 +44,7 @@ class NavigatrService {
     final summary = trip['summary'];
     final shape = trip['legs'][0]['shape'] as String? ?? '';
     
-    final polyline = NavigatrPolyline.decode(shape);
+    final polyline = MhjMapsPolyline.decode(shape);
     final int durationSeconds = (summary['time'] as num?)?.toInt() ?? 0;
     final double distanceKm = (summary['length'] as num?)?.toDouble() ?? 0.0;
     final int distanceMeters = (distanceKm * 1000).round();
@@ -60,19 +60,19 @@ class NavigatrService {
           instruction: m['instruction'] ?? '',
           type: (m['type'] as int?)?.toString() ?? '0',
           distanceMeters: ((m['length'] as num?)?.toDouble() ?? 0.0 * 1000).round(),
-          distanceText: NavigatrFormat.distance(((m['length'] as num?)?.toDouble() ?? 0.0 * 1000).round()),
+          distanceText: MhjMapsFormat.distance(((m['length'] as num?)?.toDouble() ?? 0.0 * 1000).round()),
           durationSeconds: (m['time'] as num?)?.toInt() ?? 0,
-          durationText: NavigatrFormat.duration((m['time'] as num?)?.toInt() ?? 0),
-          startPoint: NavigatrLatLng(lat: mLat, lng: mLon),
+          durationText: MhjMapsFormat.duration((m['time'] as num?)?.toInt() ?? 0),
+          startPoint: MhjMapsLatLng(lat: mLat, lng: mLon),
         );
       }).toList();
     }
 
     return RouteResult(
       durationSeconds: durationSeconds,
-      durationText: NavigatrFormat.duration(durationSeconds),
+      durationText: MhjMapsFormat.duration(durationSeconds),
       distanceMeters: distanceMeters,
-      distanceText: NavigatrFormat.distance(distanceMeters),
+      distanceText: MhjMapsFormat.distance(distanceMeters),
       polyline: polyline,
       maneuvers: maneuvers,
     );
@@ -81,7 +81,7 @@ class NavigatrService {
   Future<GeocodeResult> geocode(String address) async {
     final response = await http.get(
       Uri.parse('${config.nominatimUrl}/search?q=${Uri.encodeComponent(address)}&format=json&limit=1'),
-      headers: {'User-Agent': 'navigatr-flutter/1.0'},
+      headers: {'User-Agent': 'mhj_maps-flutter/1.0'},
     );
 
     if (response.statusCode != 200) {
@@ -104,7 +104,7 @@ class NavigatrService {
   Future<GeocodeResult> reverseGeocode(double lat, double lng) async {
     final response = await http.get(
       Uri.parse('${config.nominatimUrl}/reverse?lat=$lat&lon=$lng&format=json'),
-      headers: {'User-Agent': 'navigatr-flutter/1.0'},
+      headers: {'User-Agent': 'mhj_maps-flutter/1.0'},
     );
 
     if (response.statusCode != 200) {
@@ -122,7 +122,7 @@ class NavigatrService {
   Future<List<AutocompleteResult>> autocomplete(String query, {int limit = 5}) async {
     final response = await http.get(
       Uri.parse('${config.photonUrl}/api?q=${Uri.encodeComponent(query)}&limit=$limit'),
-      headers: {'User-Agent': 'navigatr-flutter/1.0'},
+      headers: {'User-Agent': 'mhj_maps-flutter/1.0'},
     );
 
     if (response.statusCode != 200) {

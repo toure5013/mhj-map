@@ -4,10 +4,10 @@ description: >-
   High-performance routing, geocoding, autocomplete, and fully customizable
   map rendering powered by OpenStreetMap.
 version: 1.0.0
-homepage: https://navigatr.dev
-repository: https://github.com/touresouleymane/navigatr
-issue_tracker: https://github.com/touresouleymane/navigatr/issues
-documentation: https://navigatr.dev/docs/flutter
+homepage: https://mhj_maps.dev
+repository: https://github.com/touresouleymane/mhj_maps
+issue_tracker: https://github.com/touresouleymane/mhj_maps/issues
+documentation: https://mhj_maps.dev/docs/flutter
 
 topics:
   - maps

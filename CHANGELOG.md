@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **NavigatrMap Widget** — High-performance, customizable map widget powered by `flutter_map`.
+- **MhjMapsMap Widget** — High-performance, customizable map widget powered by `flutter_map`.
   - `theme` parameter — Apply a complete visual theme in one line.
   - `tileProvider` parameter — Switch between 13+ free tile providers.
   - `onTap` / `onLongPress` — Tap and long-press callbacks with coordinates.
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `additionalLayers` — Add custom layers on top of the map.
   - `minZoom` / `maxZoom` / `rotation` — Full camera control.
 
-- **NavigatrMapController** — Programmatic map control.
+- **MhjMapsMapController** — Programmatic map control.
   - `addMarker()` / `addCustomMarker()` — Standard and custom widget markers.
   - `drawRoute()` / `drawDashedRoute()` — Solid and dashed polylines with borders.
   - `addCircle()` — Circle overlays for radius visualization.
@@ -26,15 +26,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `zoomIn()` / `zoomOut()` / `rotateTo()` / `resetRotation()` — Camera methods.
   - `clearAll()` — Remove all overlays at once.
 
-- **13 Built-in Map Themes** (`NavigatrMapThemes`)
+- **13 Built-in Map Themes** (`MhjMapsMapThemes`)
   - Light: `standard`, `cleanLight`, `voyager`, `blankCanvas`, `professional`, `whisper`
   - Dark: `darkElegant`, `darkSilent`
   - Specialty: `topographic`, `cycling`, `humanitarianMap`, `satellite`, `terrain`
 
-- **13 Tile Providers** (`NavigatrTileProvider`)
+- **13 Tile Providers** (`MhjMapsTileProvider`)
   - OpenStreetMap, CartoDB (Positron, Dark Matter, Voyager, No Labels variants),
     OpenTopoMap, CyclOSM, Humanitarian HOT, Esri (Street, Imagery, Topo, Light Gray)
-  - `NavigatrTileProvider.custom()` factory for any tile URL.
+  - `MhjMapsTileProvider.custom()` factory for any tile URL.
 
 - **Routing** — Turn-by-turn routing via Valhalla.
   - Support for `auto`, `bicycle`, `pedestrian` costing modes.
@@ -46,10 +46,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Autocomplete** — Address suggestions via Photon.
 
 - **Utilities**
-  - `NavigatrFormat.duration()` / `NavigatrFormat.distance()` — Human-readable formatting.
-  - `NavigatrPolyline.decode()` — Encoded polyline decoder.
+  - `MhjMapsFormat.duration()` / `MhjMapsFormat.distance()` — Human-readable formatting.
+  - `MhjMapsPolyline.decode()` — Encoded polyline decoder.
 
 - **Models**
-  - `NavigatrLatLng`, `NavigatrConfig`, `RouteResult`, `GeocodeResult`,
-    `AutocompleteResult`, `Maneuver`, `MapStyle`, `NavigatrMapOptions`,
-    `NavigatrBounds`, `NavigatrInteractiveFlags`.
+  - `MhjMapsLatLng`, `MhjMapsConfig`, `RouteResult`, `GeocodeResult`,
+    `AutocompleteResult`, `Maneuver`, `MapStyle`, `MhjMapsMapOptions`,
+    `MhjMapsBounds`, `MhjMapsInteractiveFlags`.
