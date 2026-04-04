@@ -3,16 +3,16 @@ import 'package:navigatr/navigatr.dart';
 import 'dart:ui';
 
 void main() {
-  runApp(const NavigatrTestApp());
+  runApp(const NavigatrExampleApp());
 }
 
-class NavigatrTestApp extends StatelessWidget {
-  const NavigatrTestApp({super.key});
+class NavigatrExampleApp extends StatelessWidget {
+  const NavigatrExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigatr Test App',
+      title: 'Navigatr Example',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -22,19 +22,19 @@ class NavigatrTestApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Inter',
       ),
-      home: const TestMapScreen(),
+      home: const MapExampleScreen(),
     );
   }
 }
 
-class TestMapScreen extends StatefulWidget {
-  const TestMapScreen({super.key});
+class MapExampleScreen extends StatefulWidget {
+  const MapExampleScreen({super.key});
 
   @override
-  State<TestMapScreen> createState() => _TestMapScreenState();
+  State<MapExampleScreen> createState() => _MapExampleScreenState();
 }
 
-class _TestMapScreenState extends State<TestMapScreen> {
+class _MapExampleScreenState extends State<MapExampleScreen> {
   final Navigatr _navigatr = Navigatr();
   NavigatrMapController? _mapController;
 
@@ -51,10 +51,13 @@ class _TestMapScreenState extends State<TestMapScreen> {
   bool _isLoading = false;
   RouteResult? _routeResult;
 
+  // ─── Map Customization ────────────────────────────────────────────
+  NavigatrMapTheme _currentTheme = NavigatrMapThemes.standard;
+  bool _showThemePicker = false;
+
   Future<void> _calculateRoute() async {
     setState(() => _isLoading = true);
     try {
-      // 1. Get coordinates (use stored or geocode if manually typed)
       final NavigatrLatLng originCoords;
       if (_selectedOrigin != null &&
           _selectedOrigin!.displayName == _originController.text) {
@@ -79,7 +82,6 @@ class _TestMapScreenState extends State<TestMapScreen> {
         destCoords = NavigatrLatLng(lat: dest.lat, lng: dest.lng);
       }
 
-      // 2. Get route
       final result = await _navigatr.route(
         origin: originCoords,
         destination: destCoords,
@@ -90,28 +92,27 @@ class _TestMapScreenState extends State<TestMapScreen> {
         _isLoading = false;
       });
 
-      // 3. Update Map
       if (_mapController != null) {
-        _mapController!.clearMarkers();
-        _mapController!.clearRoute();
+        _mapController!.clearAll();
 
         _mapController!.addMarker(
           position: originCoords,
-          icon: const Icon(Icons.location_on, color: Colors.blue, size: 40),
+          icon: _buildSmartMarker(Colors.blue, Icons.my_location),
         );
         _mapController!.addMarker(
           position: destCoords,
-          icon: const Icon(
-            Icons.location_on,
-            color: Color(0xFF00FF94),
-            size: 40,
+          icon: _buildSmartMarker(
+            _parseHexColor(_currentTheme.markerColor),
+            Icons.flag,
           ),
         );
 
         _mapController!.drawRoute(
           result.polyline,
-          color: const Color(0xFF00FF94),
+          color: _parseHexColor(_currentTheme.polylineColor),
           width: 5.0,
+          borderColor: Colors.black26,
+          borderWidth: 1,
         );
 
         _mapController!.fitRoute(result.polyline);
@@ -119,11 +120,44 @@ class _TestMapScreenState extends State<TestMapScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
       }
     }
+  }
+
+  Widget _buildSmartMarker(Color color, IconData icon) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.4),
+            blurRadius: 12,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Icon(icon, color: Colors.white, size: 20),
+    );
+  }
+
+  Color _parseHexColor(String hex) {
+    hex = hex.replaceAll('#', '');
+    if (hex.length == 6) hex = 'FF$hex';
+    return Color(int.parse(hex, radix: 16));
+  }
+
+  void _onThemeSelected(NavigatrMapTheme theme) {
+    setState(() {
+      _currentTheme = theme;
+      _showThemePicker = false;
+    });
   }
 
   @override
@@ -131,14 +165,26 @@ class _TestMapScreenState extends State<TestMapScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // The Map
+          // ─── The Map (with theme) ─────────────────────────────────
           NavigatrMap(
-            center: const NavigatrLatLng(lat: 48.8566, lng: 2.3522), // Paris
+            key: ValueKey(_currentTheme.id),
+            center: const NavigatrLatLng(lat: 48.8566, lng: 2.3522),
             zoom: 12,
-            onMapCreated: (controller) => _mapController = controller,
+            theme: _currentTheme,
+            showZoomControls: true,
+            onMapCreated: (controller) {
+              _mapController = controller;
+              // Redraw route if we had one
+              if (_routeResult != null) {
+                _calculateRoute();
+              }
+            },
+            onTap: (position) {
+              debugPrint('Map tapped: $position');
+            },
           ),
 
-          // Search UI Overlay
+          // ─── Search UI Overlay ────────────────────────────────────
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -172,7 +218,62 @@ class _TestMapScreenState extends State<TestMapScreen> {
             ),
           ),
 
-          // Bottom Info Overlay
+          // ─── Theme Picker Button ──────────────────────────────────
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 120,
+            right: 16,
+            child: _buildGlassButton(
+              icon: Icons.palette_outlined,
+              onPressed: () =>
+                  setState(() => _showThemePicker = !_showThemePicker),
+            ),
+          ),
+
+          // ─── Theme Picker Panel ───────────────────────────────────
+          if (_showThemePicker)
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 170,
+              right: 16,
+              child: _buildThemePicker(),
+            ),
+
+          // ─── Current Theme Badge ──────────────────────────────────
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 120,
+            left: 16,
+            child: _buildGlassContainer(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: _parseHexColor(_currentTheme.polylineColor),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _currentTheme.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ─── Bottom Route Info ────────────────────────────────────
           if (_routeResult != null || _isLoading)
             Positioned(
               bottom: 40,
@@ -221,8 +322,10 @@ class _TestMapScreenState extends State<TestMapScreen> {
                                     ),
                                     Text(
                                       _routeResult!.distanceText,
-                                      style: const TextStyle(
-                                        color: Color(0xFF00FF94),
+                                      style: TextStyle(
+                                        color: _parseHexColor(
+                                          _currentTheme.polylineColor,
+                                        ),
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -237,8 +340,13 @@ class _TestMapScreenState extends State<TestMapScreen> {
                               child: ElevatedButton(
                                 onPressed: _calculateRoute,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF00FF94),
-                                  foregroundColor: Colors.black,
+                                  backgroundColor: _parseHexColor(
+                                    _currentTheme.polylineColor,
+                                  ),
+                                  foregroundColor:
+                                      _currentTheme.isDark
+                                          ? Colors.black
+                                          : Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 16,
                                   ),
@@ -267,20 +375,138 @@ class _TestMapScreenState extends State<TestMapScreen> {
                 child: ElevatedButton(
                   onPressed: _calculateRoute,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00FF94),
-                    foregroundColor: Colors.black,
+                    backgroundColor: _parseHexColor(
+                      _currentTheme.polylineColor,
+                    ),
+                    foregroundColor:
+                        _currentTheme.isDark ? Colors.black : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: const Text(
                     'GET DIRECTIONS',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  // ─── UI Builders ──────────────────────────────────────────────────
+
+  Widget _buildThemePicker() {
+    return _buildGlassContainer(
+      child: SizedBox(
+        width: 220,
+        height: 340,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemCount: NavigatrMapThemes.all.length,
+          itemBuilder: (context, index) {
+            final theme = NavigatrMapThemes.all[index];
+            final isSelected = theme.id == _currentTheme.id;
+
+            return InkWell(
+              onTap: () => _onThemeSelected(theme),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                color: isSelected
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.transparent,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: _parseHexColor(theme.polylineColor),
+                        borderRadius: BorderRadius.circular(6),
+                        border: isSelected
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
+                      ),
+                      child: theme.isDark
+                          ? const Icon(
+                              Icons.dark_mode,
+                              color: Colors.white70,
+                              size: 14,
+                            )
+                          : const Icon(
+                              Icons.light_mode,
+                              color: Colors.white70,
+                              size: 14,
+                            ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            theme.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            theme.description,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white38,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isSelected)
+                      const Icon(Icons.check, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGlassButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Icon(icon, color: Colors.white, size: 20),
+          ),
+        ),
       ),
     );
   }
@@ -310,7 +536,8 @@ class _TestMapScreenState extends State<TestMapScreen> {
     void Function(AutocompleteResult)? onOptionSelected,
   }) {
     return Autocomplete<AutocompleteResult>(
-      displayStringForOption: (AutocompleteResult option) => option.displayName,
+      displayStringForOption: (AutocompleteResult option) =>
+          option.displayName,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return const Iterable<AutocompleteResult>.empty();
@@ -319,54 +546,51 @@ class _TestMapScreenState extends State<TestMapScreen> {
       },
       onSelected: (AutocompleteResult selection) {
         controller.text = selection.displayName;
-        if (onOptionSelected != null) {
-          onOptionSelected(selection);
-        }
+        onOptionSelected?.call(selection);
         _calculateRoute();
       },
       fieldViewBuilder:
           (context, fieldController, focusNode, onFieldSubmitted) {
-            // Link the provided controller with the fieldController
-            if (fieldController.text != controller.text) {
-              fieldController.text = controller.text;
-            }
+        if (fieldController.text != controller.text) {
+          fieldController.text = controller.text;
+        }
 
-            fieldController.addListener(() {
-              if (controller.text != fieldController.text) {
-                controller.text = fieldController.text;
-              }
-            });
+        fieldController.addListener(() {
+          if (controller.text != fieldController.text) {
+            controller.text = fieldController.text;
+          }
+        });
 
-            return TextField(
-              controller: fieldController,
-              focusNode: focusNode,
-              onSubmitted: (value) => onFieldSubmitted(),
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
-                prefixIcon: Icon(icon, color: iconColor, size: 20),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 18,
-                  horizontal: 16,
-                ),
-                suffixIcon: fieldController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Colors.white38,
-                          size: 18,
-                        ),
-                        onPressed: () {
-                          fieldController.clear();
-                          controller.clear();
-                        },
-                      )
-                    : null,
-              ),
-            );
-          },
+        return TextField(
+          controller: fieldController,
+          focusNode: focusNode,
+          onSubmitted: (value) => onFieldSubmitted(),
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
+            prefixIcon: Icon(icon, color: iconColor, size: 20),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 18,
+              horizontal: 16,
+            ),
+            suffixIcon: fieldController.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.clear,
+                      color: Colors.white38,
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      fieldController.clear();
+                      controller.clear();
+                    },
+                  )
+                : null,
+          ),
+        );
+      },
       optionsViewBuilder: (context, onSelected, options) {
         return Align(
           alignment: Alignment.topLeft,
@@ -398,9 +622,8 @@ class _TestMapScreenState extends State<TestMapScreen> {
                     separatorBuilder: (context, index) =>
                         const Divider(height: 1, color: Colors.white10),
                     itemBuilder: (BuildContext context, int index) {
-                      final AutocompleteResult option = options.elementAt(
-                        index,
-                      );
+                      final AutocompleteResult option =
+                          options.elementAt(index);
                       return ListTile(
                         leading: const Icon(
                           Icons.location_on_outlined,

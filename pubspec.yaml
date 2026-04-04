@@ -1,11 +1,23 @@
 name: navigatr
-description: The open-source Maps SDK for Flutter. Zero API keys, zero cost. High-performance routing, geocoding, and map rendering.
+description: >-
+  The open-source Maps SDK for Flutter. Zero API keys, zero cost.
+  High-performance routing, geocoding, autocomplete, and fully customizable
+  map rendering powered by OpenStreetMap.
 version: 1.0.0
 homepage: https://navigatr.dev
 repository: https://github.com/touresouleymane/navigatr
+issue_tracker: https://github.com/touresouleymane/navigatr/issues
+documentation: https://navigatr.dev/docs/flutter
+
+topics:
+  - maps
+  - openstreetmap
+  - geocoding
+  - routing
+  - navigation
 
 environment:
-  sdk: ">=3.10.0 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"
 
 dependencies:

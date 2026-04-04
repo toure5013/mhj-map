@@ -1,7 +1,7 @@
 import 'map_style.dart';
 
 class MapStylePresets {
-  static const MapColors DEFAULT_COLORS = MapColors(
+  static const MapColors defaultColors = MapColors(
     primary: '#3b82f6',
     secondary: '#6366f1',
     background: '#f8fafc',
@@ -12,9 +12,9 @@ class MapStylePresets {
     labels: '#1e293b',
   );
 
-  static const LayerVisibility DEFAULT_LAYERS = LayerVisibility();
-  static const MarkerStyle DEFAULT_MARKER = MarkerStyle();
-  static const PolylineStyle DEFAULT_POLYLINE = PolylineStyle();
+  static const LayerVisibility defaultLayers = LayerVisibility();
+  static const MarkerStyle defaultMarker = MarkerStyle();
+  static const PolylineStyle defaultPolyline = PolylineStyle();
 
   static final List<MapStylePreset> presets = [
     MapStylePreset(
@@ -24,10 +24,10 @@ class MapStylePresets {
         id: 'default',
         name: 'Default',
         theme: MapTheme.light,
-        colors: DEFAULT_COLORS,
-        layers: DEFAULT_LAYERS,
-        markers: DEFAULT_MARKER,
-        polyline: DEFAULT_POLYLINE,
+        colors: defaultColors,
+        layers: defaultLayers,
+        markers: defaultMarker,
+        polyline: defaultPolyline,
       ),
     ),
     MapStylePreset(
@@ -47,9 +47,9 @@ class MapStylePresets {
           buildings: '#334155',
           labels: '#e2e8f0',
         ),
-        layers: DEFAULT_LAYERS,
-        markers: DEFAULT_MARKER.copyWith(color: '#60a5fa'),
-        polyline: DEFAULT_POLYLINE.copyWith(color: '#60a5fa'),
+        layers: defaultLayers,
+        markers: defaultMarker.copyWith(color: '#60a5fa'),
+        polyline: defaultPolyline.copyWith(color: '#60a5fa'),
       ),
     ),
     MapStylePreset(
@@ -59,10 +59,10 @@ class MapStylePresets {
         id: 'satellite',
         name: 'Satellite',
         theme: MapTheme.satellite,
-        colors: DEFAULT_COLORS.copyWith(labels: '#ffffff'),
-        layers: DEFAULT_LAYERS.copyWith(buildings: false, terrain: true),
-        markers: DEFAULT_MARKER.copyWith(color: '#fbbf24'),
-        polyline: DEFAULT_POLYLINE.copyWith(color: '#fbbf24', weight: 4.0),
+        colors: defaultColors.copyWith(labels: '#ffffff'),
+        layers: defaultLayers.copyWith(buildings: false, terrain: true),
+        markers: defaultMarker.copyWith(color: '#fbbf24'),
+        polyline: defaultPolyline.copyWith(color: '#fbbf24', weight: 4.0),
       ),
     ),
     MapStylePreset(
@@ -82,9 +82,9 @@ class MapStylePresets {
           buildings: '#e2e8f0',
           labels: '#0f172a',
         ),
-        layers: DEFAULT_LAYERS.copyWith(traffic: true, transit: true),
-        markers: DEFAULT_MARKER.copyWith(color: '#2563eb'),
-        polyline: DEFAULT_POLYLINE.copyWith(color: '#2563eb', weight: 6.0, opacity: 0.9),
+        layers: defaultLayers.copyWith(traffic: true, transit: true),
+        markers: defaultMarker.copyWith(color: '#2563eb'),
+        polyline: defaultPolyline.copyWith(color: '#2563eb', weight: 6.0, opacity: 0.9),
       ),
     ),
     MapStylePreset(
@@ -114,8 +114,8 @@ class MapStylePresets {
           traffic: false,
           transit: false,
         ),
-        markers: DEFAULT_MARKER.copyWith(color: '#000000'),
-        polyline: DEFAULT_POLYLINE.copyWith(color: '#000000', weight: 3.0, opacity: 1.0),
+        markers: defaultMarker.copyWith(color: '#000000'),
+        polyline: defaultPolyline.copyWith(color: '#000000', weight: 3.0, opacity: 1.0),
       ),
     ),
   ];
