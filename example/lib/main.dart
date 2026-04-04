@@ -1,93 +1,127 @@
 import 'package:flutter/material.dart';
 import 'package:navigatr/navigatr.dart';
+import 'dart:ui';
 
 void main() {
-  runApp(const NavigatrExample());
+  runApp(const NavigatrTestApp());
 }
 
-class NavigatrExample extends StatelessWidget {
-  const NavigatrExample({super.key});
+class NavigatrTestApp extends StatelessWidget {
+  const NavigatrTestApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigatr Flutter Demo',
+      title: 'Navigatr Test App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0A0A0F),
-        primaryColor: const Color(0xFF00FF94),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF00FF94),
+          brightness: Brightness.dark,
+        ),
         useMaterial3: true,
+        fontFamily: 'Inter',
       ),
-      home: const RouteDemoScreen(),
+      home: const TestMapScreen(),
     );
   }
 }
 
-class RouteDemoScreen extends StatefulWidget {
-  const RouteDemoScreen({super.key});
+class TestMapScreen extends StatefulWidget {
+  const TestMapScreen({super.key});
 
   @override
-  State<RouteDemoScreen> createState() => _RouteDemoScreenState();
+  State<TestMapScreen> createState() => _TestMapScreenState();
 }
 
-class _RouteDemoScreenState extends State<RouteDemoScreen> {
-  final Navigatr nav = Navigatr();
+class _TestMapScreenState extends State<TestMapScreen> {
+  final Navigatr _navigatr = Navigatr();
   NavigatrMapController? _mapController;
-  
-  final TextEditingController _originController = TextEditingController(text: 'Accra Mall, Ghana');
-  final TextEditingController _destController = TextEditingController(text: 'Kotoka Airport, Ghana');
-  
-  RouteResult? _currentRoute;
-  bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // Auto-load route on start
-    WidgetsBinding.instance.addPostFrameCallback((_) => _calculateRoute());
-  }
+  final TextEditingController _originController = TextEditingController(
+    text: 'Paris, France',
+  );
+  final TextEditingController _destController = TextEditingController(
+    text: 'Lyon, France',
+  );
+
+  AutocompleteResult? _selectedOrigin;
+  AutocompleteResult? _selectedDestination;
+
+  bool _isLoading = false;
+  RouteResult? _routeResult;
 
   Future<void> _calculateRoute() async {
     setState(() => _isLoading = true);
-    
     try {
-      final originRes = await nav.geocode(_originController.text);
-      final destRes = await nav.geocode(_destController.text);
-      
-      final origin = NavigatrLatLng(lat: originRes.lat, lng: originRes.lng);
-      final dest = NavigatrLatLng(lat: destRes.lat, lng: destRes.lng);
-      
-      final result = await nav.route(origin: origin, destination: dest);
-      
+      // 1. Get coordinates (use stored or geocode if manually typed)
+      final NavigatrLatLng originCoords;
+      if (_selectedOrigin != null &&
+          _selectedOrigin!.displayName == _originController.text) {
+        originCoords = NavigatrLatLng(
+          lat: _selectedOrigin!.lat,
+          lng: _selectedOrigin!.lng,
+        );
+      } else {
+        final origin = await _navigatr.geocode(_originController.text);
+        originCoords = NavigatrLatLng(lat: origin.lat, lng: origin.lng);
+      }
+
+      final NavigatrLatLng destCoords;
+      if (_selectedDestination != null &&
+          _selectedDestination!.displayName == _destController.text) {
+        destCoords = NavigatrLatLng(
+          lat: _selectedDestination!.lat,
+          lng: _selectedDestination!.lng,
+        );
+      } else {
+        final dest = await _navigatr.geocode(_destController.text);
+        destCoords = NavigatrLatLng(lat: dest.lat, lng: dest.lng);
+      }
+
+      // 2. Get route
+      final result = await _navigatr.route(
+        origin: originCoords,
+        destination: destCoords,
+      );
+
       setState(() {
-        _currentRoute = result;
+        _routeResult = result;
         _isLoading = false;
       });
 
+      // 3. Update Map
       if (_mapController != null) {
         _mapController!.clearMarkers();
         _mapController!.clearRoute();
-        
+
         _mapController!.addMarker(
-          position: origin,
-          label: 'Origin',
-          icon: const Icon(Icons.my_location, color: Color(0xFF00FF94), size: 30),
+          position: originCoords,
+          icon: const Icon(Icons.location_on, color: Colors.blue, size: 40),
         );
         _mapController!.addMarker(
-          position: dest,
-          label: 'Destination',
-          icon: const Icon(Icons.location_on, color: Colors.orangeAccent, size: 30),
+          position: destCoords,
+          icon: const Icon(
+            Icons.location_on,
+            color: Color(0xFF00FF94),
+            size: 40,
+          ),
         );
-        
-        _mapController!.drawRoute(result.polyline);
+
+        _mapController!.drawRoute(
+          result.polyline,
+          color: const Color(0xFF00FF94),
+          width: 5.0,
+        );
+
         _mapController!.fitRoute(result.polyline);
       }
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
       }
     }
   }
@@ -95,97 +129,311 @@ class _RouteDemoScreenState extends State<RouteDemoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Navigatr SDK Demo', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: Stack(
         children: [
+          // The Map
           NavigatrMap(
-            center: const NavigatrLatLng(lat: 5.6037, lng: -0.1870),
-            zoom: 13,
+            center: const NavigatrLatLng(lat: 48.8566, lng: 2.3522), // Paris
+            zoom: 12,
             onMapCreated: (controller) => _mapController = controller,
           ),
-          
-          // UI Panel
-          Positioned(
-            top: 20,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E26).withOpacity(0.9),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white10),
-              ),
+
+          // Search UI Overlay
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    controller: _originController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.circle, size: 12, color: Color(0xFF00FF94)),
-                      hintText: 'Origin',
-                      filled: true,
-                      fillColor: Colors.black26,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _destController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.location_on, size: 16, color: Colors.orangeAccent),
-                      hintText: 'Destination',
-                      filled: true,
-                      fillColor: Colors.black26,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _calculateRoute,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF00FF94),
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: _isLoading 
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
-                        : const Text('Get Route', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    ),
-                  ),
-                  
-                  if (_currentRoute != null) ...[
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  const SizedBox(height: 10),
+                  _buildGlassContainer(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildStat('Duration', _currentRoute!.durationText),
-                        _buildStat('Distance', _currentRoute!.distanceText),
+                        _buildSearchInput(
+                          controller: _originController,
+                          hint: 'Origin',
+                          icon: Icons.my_location,
+                          iconColor: Colors.blue,
+                          onOptionSelected: (s) => _selectedOrigin = s,
+                        ),
+                        const Divider(height: 1, color: Colors.white24),
+                        _buildSearchInput(
+                          controller: _destController,
+                          hint: 'Destination',
+                          icon: Icons.location_on,
+                          iconColor: const Color(0xFF00FF94),
+                          onOptionSelected: (s) => _selectedDestination = s,
+                        ),
                       ],
                     ),
-                  ]
+                  ),
                 ],
               ),
             ),
           ),
+
+          // Bottom Info Overlay
+          if (_routeResult != null || _isLoading)
+            Positioned(
+              bottom: 40,
+              left: 16,
+              right: 16,
+              child: _buildGlassContainer(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Estimated Travel',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      _routeResult!.durationText,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Text(
+                                      'Distance',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      _routeResult!.distanceText,
+                                      style: const TextStyle(
+                                        color: Color(0xFF00FF94),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _calculateRoute,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF00FF94),
+                                  foregroundColor: Colors.black,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'RECALCULATE ROUTE',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+            )
+          else
+            Positioned(
+              bottom: 40,
+              right: 16,
+              left: 16,
+              child: SizedBox(
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: _calculateRoute,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00FF94),
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text(
+                    'GET DIRECTIONS',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildStat(String label, String value) {
-    return Column(
-      children: [
-        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 12)),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-      ],
+  Widget _buildGlassContainer({required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchInput({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    required Color iconColor,
+    void Function(AutocompleteResult)? onOptionSelected,
+  }) {
+    return Autocomplete<AutocompleteResult>(
+      displayStringForOption: (AutocompleteResult option) => option.displayName,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return const Iterable<AutocompleteResult>.empty();
+        }
+        return await _navigatr.autocomplete(textEditingValue.text);
+      },
+      onSelected: (AutocompleteResult selection) {
+        controller.text = selection.displayName;
+        if (onOptionSelected != null) {
+          onOptionSelected(selection);
+        }
+        _calculateRoute();
+      },
+      fieldViewBuilder:
+          (context, fieldController, focusNode, onFieldSubmitted) {
+            // Link the provided controller with the fieldController
+            if (fieldController.text != controller.text) {
+              fieldController.text = controller.text;
+            }
+
+            fieldController.addListener(() {
+              if (controller.text != fieldController.text) {
+                controller.text = fieldController.text;
+              }
+            });
+
+            return TextField(
+              controller: fieldController,
+              focusNode: focusNode,
+              onSubmitted: (value) => onFieldSubmitted(),
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
+                prefixIcon: Icon(icon, color: iconColor, size: 20),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 16,
+                ),
+                suffixIcon: fieldController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(
+                          Icons.clear,
+                          color: Colors.white38,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          fieldController.clear();
+                          controller.clear();
+                        },
+                      )
+                    : null,
+              ),
+            );
+          },
+      optionsViewBuilder: (context, onSelected, options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 32,
+              margin: const EdgeInsets.only(top: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A1A).withValues(alpha: 0.95),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: ListView.separated(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, color: Colors.white10),
+                    itemBuilder: (BuildContext context, int index) {
+                      final AutocompleteResult option = options.elementAt(
+                        index,
+                      );
+                      return ListTile(
+                        leading: const Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.white38,
+                          size: 18,
+                        ),
+                        title: Text(
+                          option.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        subtitle: Text(
+                          option.displayName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white38,
+                            fontSize: 11,
+                          ),
+                        ),
+                        onTap: () => onSelected(option),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
