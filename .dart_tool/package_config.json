@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "args",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/async-2.13.1",
       "packageUri": "lib/",
@@ -54,6 +60,12 @@
       "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/flutter_map-6.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_svg",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/flutter_svg-2.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
     },
     {
       "name": "flutter_test",
@@ -152,6 +164,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "path_parsing",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/path_parsing-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/petitparser-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "polylabel",
       "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/polylabel-1.0.1",
       "packageUri": "lib/",
@@ -218,6 +242,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "vector_graphics",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/vector_graphics-1.1.21",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/vector_math-2.2.0",
       "packageUri": "lib/",
@@ -242,7 +284,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "navigatr",
+      "name": "xml",
+      "rootUri": "file:///Users/touresouleymane/.pub-cache/hosted/pub.dev/xml-6.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "mhj_maps",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"

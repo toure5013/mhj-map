@@ -1,4 +1,4 @@
-name: navigatr
+name: mhj_maps
 description: >-
   The open-source Maps SDK for Flutter. Zero API keys, zero cost.
   High-performance routing, geocoding, autocomplete, and fully customizable
@@ -27,6 +27,7 @@ dependencies:
   latlong2: ^0.9.0
   http: ^1.2.0
   collection: ^1.17.0
+  flutter_svg: ^2.2.4
 
 dev_dependencies:
   flutter_test:

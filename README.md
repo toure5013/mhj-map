@@ -188,15 +188,35 @@ NavigatrMap(
 
 ### Markers
 
+Navigatr provides robust helpers to add any kind of marker to your map:
+
 ```dart
-// Standard marker
+// 1. Basic Icon Marker
 _controller.addMarker(
   position: NavigatrLatLng(lat: 48.85, lng: 2.35),
   icon: Icon(Icons.location_on, color: Colors.red, size: 40),
-  label: 'Paris',
 );
 
-// Custom widget marker
+// 2. SVG Marker (Local or Network)
+// Navigatr has native flutter_svg support. You can even tint SVGs dynamically!
+_controller.addSvgMarker(
+  position: myPos,
+  svgPath: 'assets/icons/pin.svg', // or 'https://...'
+  isNetwork: false,
+  color: Colors.blue, // Automatically tints the SVG
+  width: 45,
+  height: 45,
+);
+
+// 3. Image Marker (PNG/JPG)
+_controller.addImageMarker(
+  position: myPos,
+  imagePath: 'https://example.com/marker.png',
+  isNetwork: true,
+  width: 40,
+);
+
+// 4. Custom Widget Marker (Any Flutter UI!)
 _controller.addCustomMarker(
   position: myPos,
   child: Container(

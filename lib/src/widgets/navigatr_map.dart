@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../models/lat_lng.dart';
 import '../models/tile_provider.dart';
 import '../models/map_theme.dart';
@@ -79,6 +80,66 @@ class NavigatrMapController {
       ),
     );
     _onUpdate();
+  }
+
+  /// Adds a marker using a local PNG/JPG asset or network URL.
+  void addImageMarker({
+    required NavigatrLatLng position,
+    required String imagePath,
+    bool isNetwork = false,
+    double width = 40,
+    double height = 40,
+    Alignment alignment = Alignment.center,
+    BoxFit fit = BoxFit.contain,
+  }) {
+    final imageWidget = isNetwork
+        ? Image.network(imagePath, width: width, height: height, fit: fit)
+        : Image.asset(imagePath, width: width, height: height, fit: fit);
+
+    addCustomMarker(
+      position: position,
+      width: width,
+      height: height,
+      alignment: alignment,
+      child: imageWidget,
+    );
+  }
+
+  /// Adds a marker using an SVG (local asset or network).
+  void addSvgMarker({
+    required NavigatrLatLng position,
+    required String svgPath,
+    bool isNetwork = false,
+    Color? color,
+    double width = 40,
+    double height = 40,
+    Alignment alignment = Alignment.center,
+  }) {
+    final svgFilter = color != null
+        ? ColorFilter.mode(color, BlendMode.srcIn)
+        : null;
+
+    final svgWidget = isNetwork
+        ? SvgPicture.network(
+            svgPath,
+            width: width,
+            height: height,
+            colorFilter: svgFilter,
+          )
+        : SvgPicture.asset(
+            svgPath,
+            width: width,
+            height: height,
+            colorFilter: svgFilter,
+          );
+
+    addCustomMarker(
+      position: position,
+      width: width,
+      height: height,
+      alignment: alignment,
+      child: svgWidget,
+    );
   }
 
   /// Removes all markers from the map.

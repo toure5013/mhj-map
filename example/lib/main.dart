@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:navigatr/navigatr.dart';
+import 'package:mhj_maps/mhj_maps.dart';
 import 'dart:ui';
 
 void main() {
