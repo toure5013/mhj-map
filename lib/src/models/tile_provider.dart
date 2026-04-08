@@ -181,6 +181,41 @@ class MhjMapsTileProvider {
     attribution: '© Esri, © OpenStreetMap contributors',
   );
 
+  /// Wikimedia Maps.
+  static const MhjMapsTileProvider wikimedia = MhjMapsTileProvider(
+    id: 'wikimedia',
+    name: 'Wikimedia',
+    urlTemplate: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+    attribution: '© OpenStreetMap contributors, Wikimedia maps',
+  );
+
+  /// Stamen Toner — high-contrast black and white.
+  static const MhjMapsTileProvider stamenToner = MhjMapsTileProvider(
+    id: 'stamen_toner',
+    name: 'Stamen Toner',
+    urlTemplate: 'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+    attribution:
+        'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+  );
+
+  /// Stamen Terrain.
+  static const MhjMapsTileProvider stamenTerrain = MhjMapsTileProvider(
+    id: 'stamen_terrain',
+    name: 'Stamen Terrain',
+    urlTemplate: 'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
+    attribution:
+        'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+  );
+
+  /// OpenCycleMap — cycling-oriented topographic map.
+  static const MhjMapsTileProvider openCycleMap = MhjMapsTileProvider(
+    id: 'opencyclemap',
+    name: 'OpenCycleMap',
+    urlTemplate: 'https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
+    attribution: '© OpenStreetMap contributors, © Thunderforest',
+    subdomains: ['a', 'b', 'c'],
+  );
+
   /// Esri Light Gray Canvas — minimal basemap for overlays.
   static const MhjMapsTileProvider esriLightGray = MhjMapsTileProvider(
     id: 'esri_light_gray',
@@ -225,6 +260,10 @@ class MhjMapsTileProvider {
         esriWorldImagery,
         esriWorldTopo,
         esriLightGray,
+        wikimedia,
+        stamenToner,
+        stamenTerrain,
+        openCycleMap,
       ];
 
   /// Returns all light-themed tile providers.

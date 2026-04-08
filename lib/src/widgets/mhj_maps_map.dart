@@ -29,6 +29,18 @@ class MhjMapsMapController {
   final List<CircleMarker> _circles = [];
   final Function() _onUpdate;
 
+  /// Default color for markers if none is specified.
+  Color defaultMarkerColor = const Color(0xFF3b82f6);
+
+  /// Default color for polylines if none is specified.
+  Color defaultPolylineColor = const Color(0xFF00FF94);
+
+  /// Default size for markers.
+  double defaultMarkerSize = 40.0;
+
+  /// Default width for polylines.
+  double defaultPolylineStrokeWidth = 4.0;
+
   MhjMapsMapController({
     required Function() onUpdate,
   }) : _onUpdate = onUpdate {
@@ -45,21 +57,31 @@ class MhjMapsMapController {
     required MhjMapsLatLng position,
     Widget? icon,
     String? label,
-    double width = 40,
-    double height = 40,
+    double? width,
+    double? height,
     Alignment alignment = Alignment.topCenter,
   }) {
+    final w = width ?? defaultMarkerSize;
+    final h = height ?? defaultMarkerSize;
     _markers.add(
       Marker(
         point: LatLng(position.lat, position.lng),
-        width: width,
-        height: height,
+        width: w,
+        height: h,
         alignment: alignment,
         child: icon ??
-            const Icon(Icons.location_on, color: Colors.red, size: 40),
+            Icon(Icons.location_on, color: defaultMarkerColor, size: w),
       ),
     );
     _onUpdate();
+  }
+
+  /// Adds a theme-aware marker at the given position.
+  void addThemeMarker({
+    required MhjMapsLatLng position,
+    String? label,
+  }) {
+    addMarker(position: position, label: label);
   }
 
   /// Adds a custom widget marker at the given position.
@@ -156,8 +178,8 @@ class MhjMapsMapController {
   /// Draws a route polyline on the map.
   void drawRoute(
     List<MhjMapsLatLng> polyline, {
-    Color color = const Color(0xFF00FF94),
-    double width = 4.0,
+    Color? color,
+    double? width,
     bool isDotted = false,
     Color? borderColor,
     double borderWidth = 0,
@@ -165,8 +187,8 @@ class MhjMapsMapController {
     _polylines.add(
       Polyline(
         points: polyline.map((e) => LatLng(e.lat, e.lng)).toList(),
-        color: color,
-        strokeWidth: width,
+        color: color ?? defaultPolylineColor,
+        strokeWidth: width ?? defaultPolylineStrokeWidth,
         isDotted: isDotted,
         borderColor: borderColor ?? Colors.transparent,
         borderStrokeWidth: borderWidth,
@@ -386,8 +408,29 @@ class MhjMapsMap extends StatefulWidget {
   /// Whether to show attribution.
   final bool showAttribution;
 
+  /// Whether to show a compass.
+  final bool showCompass;
+
+  /// Whether to show a scale bar.
+  final bool showScale;
+
+  /// Whether to show the user's location (requires location permissions).
+  final bool showUserLocation;
+
+  /// Whether the map is interactive (scroll/zoom).
+  final bool interactive;
+
+  /// Whether to use large zoom buttons.
+  final bool useLargeZoomButtons;
+
   /// Background color behind tiles.
   final Color? backgroundColor;
+
+  /// Default stroke width for polylines.
+  final double defaultPolylineStrokeWidth;
+
+  /// Default size for markers.
+  final double defaultMarkerSize;
 
   /// Callback when the map is created and the controller is ready.
   final Function(MhjMapsMapController controller)? onMapCreated;
@@ -417,7 +460,14 @@ class MhjMapsMap extends StatefulWidget {
     this.theme,
     this.showZoomControls = false,
     this.showAttribution = true,
-    this.backgroundColor,
+    this.showCompass = false,
+    this.showScale = false,
+    this.showUserLocation = false,
+    this.interactive = true,
+    this.useLargeZoomButtons = false,
+    this.backgroundColor = const Color(0xFFE8E8E8),
+    this.defaultPolylineStrokeWidth = 4.0,
+    this.defaultMarkerSize = 40.0,
     this.onMapCreated,
     this.onTap,
     this.onLongPress,
@@ -441,8 +491,32 @@ class _MhjMapsMapState extends State<MhjMapsMap> {
 
     // Defer onMapCreated to avoid build-time setState
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyThemeDefaults();
       widget.onMapCreated?.call(_controller);
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant MhjMapsMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.theme != oldWidget.theme) {
+      _applyThemeDefaults();
+    }
+  }
+
+  void _applyThemeDefaults() {
+    if (widget.theme != null) {
+      _controller.defaultPolylineColor = _hexToColor(widget.theme!.polylineColor);
+      _controller.defaultMarkerColor = _hexToColor(widget.theme!.markerColor);
+    }
+    _controller.defaultPolylineStrokeWidth = widget.defaultPolylineStrokeWidth;
+    _controller.defaultMarkerSize = widget.defaultMarkerSize;
+  }
+
+  Color _hexToColor(String hex) {
+    hex = hex.replaceFirst('#', '');
+    if (hex.length == 6) hex = 'FF$hex';
+    return Color(int.parse(hex, radix: 16));
   }
 
   // Resolve the tile configuration from theme > tileProvider > tileUrl > default
@@ -528,6 +602,8 @@ class _MhjMapsMapState extends State<MhjMapsMap> {
             CircleLayer(circles: _controller._circles),
             PolylineLayer(polylines: _controller._polylines),
             MarkerLayer(markers: _controller._markers),
+            if (widget.showUserLocation)
+               const MarkerLayer(markers: []), // Placeholder for user location marker
             if (widget.additionalLayers != null) ...widget.additionalLayers!,
             if (widget.showAttribution && _resolvedAttribution.isNotEmpty)
               RichAttributionWidget(
@@ -544,21 +620,33 @@ class _MhjMapsMapState extends State<MhjMapsMap> {
         if (widget.showZoomControls)
           Positioned(
             right: 16,
-            bottom: 80,
+            bottom: widget.showAttribution ? 40 : 16,
             child: Column(
               children: [
                 _ZoomButton(
                   icon: Icons.add,
                   onPressed: _controller.zoomIn,
                   isDark: widget.theme?.isDark ?? false,
+                  large: widget.useLargeZoomButtons,
                 ),
                 const SizedBox(height: 8),
                 _ZoomButton(
                   icon: Icons.remove,
                   onPressed: _controller.zoomOut,
                   isDark: widget.theme?.isDark ?? false,
+                  large: widget.useLargeZoomButtons,
                 ),
               ],
+            ),
+          ),
+        // Compass
+        if (widget.showCompass)
+          Positioned(
+            left: 16,
+            top: 16,
+            child: _CompassButton(
+              onPressed: _controller.resetRotation,
+              isDark: widget.theme?.isDark ?? false,
             ),
           ),
       ],
@@ -570,9 +658,44 @@ class _ZoomButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
   final bool isDark;
+  final bool large;
 
   const _ZoomButton({
     required this.icon,
+    required this.onPressed,
+    required this.isDark,
+    this.large = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final size = large ? 56.0 : 40.0;
+    return Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(large ? 12 : 8),
+      color: isDark ? const Color(0xFF2a2a3e) : Colors.white,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(large ? 12 : 8),
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: Icon(
+            icon,
+            size: large ? 28 : 20,
+            color: isDark ? Colors.white70 : Colors.black87,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompassButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool isDark;
+
+  const _CompassButton({
     required this.onPressed,
     required this.isDark,
   });
@@ -581,17 +704,17 @@ class _ZoomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 4,
-      borderRadius: BorderRadius.circular(8),
+      shape: const CircleBorder(),
       color: isDark ? const Color(0xFF2a2a3e) : Colors.white,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(8),
+        customBorder: const CircleBorder(),
         child: SizedBox(
-          width: 40,
-          height: 40,
+          width: 44,
+          height: 44,
           child: Icon(
-            icon,
-            size: 20,
+            Icons.explore,
+            size: 24,
             color: isDark ? Colors.white70 : Colors.black87,
           ),
         ),

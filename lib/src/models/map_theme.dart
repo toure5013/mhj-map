@@ -175,6 +175,78 @@ class MhjMapsMapThemes {
     category: MapThemeCategory.outdoor,
   );
 
+  /// High contrast black and white theme.
+  static const MhjMapsMapTheme highContrast = MhjMapsMapTheme(
+    id: 'high_contrast',
+    name: 'High Contrast',
+    description: 'B&W theme for maximum readability.',
+    tileProvider: MhjMapsTileProvider.stamenToner,
+    polylineColor: '#ff0000',
+    markerColor: '#000000',
+    isDark: false,
+    category: MapThemeCategory.monochrome,
+  );
+
+  /// Nature-focused theme with green tones.
+  static const MhjMapsMapTheme forest = MhjMapsMapTheme(
+    id: 'forest',
+    name: 'Forest',
+    description: 'Emphasis on terrain and natural features.',
+    tileProvider: MhjMapsTileProvider.stamenTerrain,
+    polylineColor: '#065f46',
+    markerColor: '#059669',
+    isDark: false,
+    category: MapThemeCategory.outdoor,
+  );
+
+  /// Wikimedia powered educational map.
+  static const MhjMapsMapTheme educational = MhjMapsMapTheme(
+    id: 'educational',
+    name: 'Educational',
+    description: 'Clear, informative map from Wikimedia.',
+    tileProvider: MhjMapsTileProvider.wikimedia,
+    polylineColor: '#d946ef',
+    markerColor: '#a21caf',
+    isDark: false,
+    category: MapThemeCategory.general,
+  );
+
+  /// Specialized cycling map.
+  static const MhjMapsMapTheme cyclePro = MhjMapsMapTheme(
+    id: 'cycle_pro',
+    name: 'Cycle Pro',
+    description: 'Advanced cycling routes and topography.',
+    tileProvider: MhjMapsTileProvider.openCycleMap,
+    polylineColor: '#ea580c',
+    markerColor: '#c2410c',
+    isDark: false,
+    category: MapThemeCategory.outdoor,
+  );
+
+  /// Icy/Cold themed map.
+  static const MhjMapsMapTheme arctic = MhjMapsMapTheme(
+    id: 'arctic',
+    name: 'Arctic',
+    description: 'Cold, blue-toned map for a fresh look.',
+    tileProvider: MhjMapsTileProvider.esriLightGray,
+    polylineColor: '#0ea5e9',
+    markerColor: '#7dd3fc',
+    isDark: false,
+    category: MapThemeCategory.minimal,
+  );
+
+  /// Deep space / neon theme.
+  static const MhjMapsMapTheme midnight = MhjMapsMapTheme(
+    id: 'midnight',
+    name: 'Midnight',
+    description: 'Deep black with neon highlights for night driving.',
+    tileProvider: MhjMapsTileProvider.cartoDarkMatter,
+    polylineColor: '#00ccff',
+    markerColor: '#f43f5e',
+    isDark: true,
+    category: MapThemeCategory.night,
+  );
+
   /// Returns all available built-in themes.
   static List<MhjMapsMapTheme> get all => [
         standard,
@@ -190,6 +262,12 @@ class MhjMapsMapThemes {
         humanitarianMap,
         satellite,
         terrain,
+        highContrast,
+        forest,
+        educational,
+        cyclePro,
+        arctic,
+        midnight,
       ];
 
   /// Returns themes filtered by category.
@@ -297,4 +375,13 @@ enum MapThemeCategory {
 
   /// Navigation-oriented maps.
   navigation,
+
+  /// High contrast / B&W maps.
+  monochrome,
+
+  /// Artistic / stylized maps.
+  artistic,
+
+  /// Optimized for night use.
+  night,
 }

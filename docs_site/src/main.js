@@ -30,15 +30,14 @@ MhjMaps is a drop-in alternative to Google Maps SDK that uses free, public OpenS
 | Feature | Description |
 |---|---|
 | 🗺️ **Map Widget** | Customizable \`MhjMapsMap\` widget powered by \`flutter_map\` |
-| 🎨 **13 Built-in Themes** | Dark, light, satellite, topo, cycling, minimal, and more |
-| 🔌 **13 Tile Providers** | OSM, CartoDB, Esri, OpenTopo, CyclOSM, HOT and others |
+| 🎨 **19 Built-in Themes** | Dark, light, satellite, topo, cycling, minimal, and premium night modes |
+| 🔌 **19 Tile Providers** | OSM, CartoDB, Esri, OpenTopo, Wikimedia, Stamen and others |
 | 🧭 **Routing** | Turn-by-turn routing via Valhalla (auto, bicycle, pedestrian) |
 | 📍 **Geocoding** | Forward & reverse geocoding via Nominatim |
 | 🔎 **Autocomplete** | Address suggestions via Photon |
 | 📐 **Custom Markers** | Add any Flutter widget as a map marker |
-| 🟢 **Circle Overlays** | Radius visualization on the map |
-| 🎯 **Tap Events** | \`onTap\`, \`onLongPress\`, \`onCameraMove\` callbacks |
-| 🔄 **Camera Control** | Zoom, rotate, fit bounds, move programmatically |
+| 🏗️ **Controller** | Full programmatic control (zoom, rotate, move, fit bounds) |
+| 🎯 **Customization** | Native controls for boussole, capture d'écran, and scale |
 | 💰 **Zero Cost** | No API keys, no billing — 100% free infrastructure |
 </section>
 
@@ -79,7 +78,7 @@ MhjMapsMap(
 
 ### Apply a Theme
 
-Choose from **13 built-in themes** with a single parameter:
+Choose from **19 built-in themes** with a single parameter:
 
 \`\`\`dart
 MhjMapsMap(
@@ -94,25 +93,46 @@ MhjMapsMap(
 <section id="map-themes">
 ## 🎨 Map Themes
 
-MhjMaps ships with **13 ready-to-use themes**. Switch themes at runtime with zero configuration:
+MhjMaps ships with **19 ready-to-use themes**. Switch themes at runtime with zero configuration:
 
-### Light Themes
-
+### Common Themes
 | Theme | Description |
 |---|---|
 | \`MhjMapsMapThemes.standard\` | Classic OpenStreetMap look |
-| \`MhjMapsMapThemes.cleanLight\` | Minimalist CartoDB Positron |
-| \`MhjMapsMapThemes.voyager\` | Colorful, detailed — ideal for nav apps |
-| \`MhjMapsMapThemes.blankCanvas\` | No labels — perfect for custom overlays |
-| \`MhjMapsMapThemes.professional\` | Esri World Street — professional cartography |
-| \`MhjMapsMapThemes.whisper\` | Ultra-minimal gray basemap |
+| \`MhjMapsMapThemes.darkElegant\` | Premium dark basemap (CartoDB Dark Matter) |
+| \`MhjMapsMapThemes.satellite\` | High-resolution Esri Satellite imagery |
+| \`MhjMapsMapThemes.terrain\` | Esri Topographic map with terrain details |
 
-### Dark Themes
-
+### New & Specialized Themes
 | Theme | Description |
 |---|---|
-| \`MhjMapsMapThemes.darkElegant\` | Premium dark basemap (CartoDB Dark Matter) |
-| \`MhjMapsMapThemes.darkSilent\` | Dark, no labels — sleek and minimal |
+| \`MhjMapsMapThemes.midnight\` | Deep black with neon blue/pink highlights |
+| \`MhjMapsMapThemes.highContrast\` | B&W (Stamen Toner) for maximum readability |
+| \`MhjMapsMapThemes.forest\` | Nature-focused terrain with green tones |
+| \`MhjMapsMapThemes.educational\` | Clear, informative map from Wikimedia |
+| \`MhjMapsMapThemes.cyclePro\` | Advanced cycling routes and topography |
+| \`MhjMapsMapThemes.arctic\` | Cold, blue-toned map for a fresh look |
+</section>
+
+---
+
+<section id="customization">
+## ⚙️ Customization
+
+Customize the map look and feel with native properties:
+
+\`\`\`dart
+MhjMapsMap(
+  center: myLocation,
+  showCompass: true,             // Interactive compass
+  useLargeZoomButtons: true,     // Premium UI controls
+  showScale: true,               // Scale indicator
+  showUserLocation: true,        // User location marker
+  defaultMarkerSize: 48.0,       // Global marker scaling
+  defaultPolylineStrokeWidth: 6.0,  // Route thickness
+  interactive: true,             // Enable/disable gestures
+)
+\`\`\`
 </section>
 
 ---
@@ -129,6 +149,12 @@ MhjMapsMap(
   center: MhjMapsLatLng(lat: 48.85, lng: 2.35),
   onMapCreated: (controller) => _controller = controller,
 )
+
+// Later in your code:
+_controller?.addMarker(position: myPos, label: 'Custom Destination');
+_controller?.drawRoute(myPolyline, color: Colors.blue);
+_controller?.fitRoute(myPolyline);
+_controller?.resetRotation();
 \`\`\`
 </section>
 
@@ -181,6 +207,7 @@ final route = await nav.route(
 
 print(route.durationText);   // "4 hrs 32 mins"
 print(route.distanceText);   // "465.2 km"
+\`\`\`
 </section>
 `;
 
