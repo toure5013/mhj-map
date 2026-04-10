@@ -3,9 +3,8 @@ name: Deploy Documentation
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'docs_site/**'
-      - 'README.md'
+    # Removed paths filter to ensure it triggers on workflow changes too
+    # and simplifies initial deployment.
 
 jobs:
   build-and-deploy:
@@ -30,3 +29,4 @@ jobs:
         with:
           folder: docs_site/dist
           branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
