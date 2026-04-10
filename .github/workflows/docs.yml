@@ -3,8 +3,9 @@ name: Deploy Documentation
 on:
   push:
     branches: [ main ]
-    # Removed paths filter to ensure it triggers on workflow changes too
-    # and simplifies initial deployment.
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -29,4 +30,3 @@ jobs:
         with:
           folder: docs_site/dist
           branch: gh-pages
-          token: ${{ secrets.GITHUB_TOKEN }}
