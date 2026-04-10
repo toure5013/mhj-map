@@ -4,8 +4,8 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'packages/flutter/docs_site/**'
-      - 'packages/flutter/README.md'
+      - 'docs_site/**'
+      - 'README.md'
 
 jobs:
   build-and-deploy:
@@ -21,12 +21,12 @@ jobs:
 
       - name: Install and Build
         run: |
-          cd packages/flutter/docs_site
+          cd docs_site
           npm install
           npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: packages/flutter/docs_site/dist
+          folder: docs_site/dist
           branch: gh-pages
