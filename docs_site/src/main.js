@@ -1,16 +1,5 @@
 import './style.css'
-import { createIcons, Github, Search, Menu, ExternalLink } from 'lucide'
 import { marked } from 'marked'
-
-// Initialize Icons
-createIcons({
-  icons: {
-    Github,
-    Search,
-    Menu,
-    ExternalLink
-  }
-})
 
 const markdownRaw = `
 # MhjMaps 🗺️
@@ -207,30 +196,48 @@ final route = await nav.route(
 
 print(route.durationText);   // "4 hrs 32 mins"
 print(route.distanceText);   // "465.2 km"
-\`\`\`
 </section>
 `;
 
-// Render Markdown
-const contentDiv = document.getElementById('markdown-content');
-contentDiv.innerHTML = marked.parse(markdownRaw);
-
-// Smooth Scroll to Sections
-document.querySelectorAll('.nav-links a').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href').slice(1);
-    const targetElement = document.getElementById(targetId);
-    
-    if (targetElement) {
-      window.scrollTo({
-        top: targetElement.offsetTop - 120,
-        behavior: 'smooth'
-      });
-      
-      // Update active link
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      this.classList.add('active');
+const init = async () => {
+  const contentDiv = document.getElementById('markdown-content');
+  if (contentDiv) {
+    try {
+      // Marked 17+ usage
+      const html = await marked.parse(markdownRaw);
+      contentDiv.innerHTML = html;
+      console.log('Markdown successfully rendered.');
+    } catch (e) {
+      console.error('Failed to render Markdown:', e);
+      contentDiv.innerHTML = '<div class="error">Failed to load content.</div>';
     }
+  }
+
+  // Smooth Scroll to Sections
+  document.querySelectorAll('.nav-links a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.slice(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 120,
+            behavior: 'smooth'
+          });
+          
+          document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        }
+      }
+    });
   });
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

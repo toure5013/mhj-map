@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/navigatr-flutter/',
+  base: './',
   build: {
     outDir: 'dist',
   }
