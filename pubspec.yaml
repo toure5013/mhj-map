@@ -4,10 +4,10 @@ description: >-
   High-performance routing, geocoding, autocomplete, and fully customizable
   map rendering powered by OpenStreetMap.
 version: 1.2.3
-homepage: https://mhj_maps.dev
-repository: https://github.com/touresouleymane/mhj_maps
-issue_tracker: https://github.com/touresouleymane/mhj_maps/issues
-documentation: https://mhj_maps.dev/docs/flutter
+homepage: https://mhj_maps.mihradj.com
+repository: https://github.com/toure5013/mhj-maps
+issue_tracker: https://github.com/toure5013/mhj-maps/issues
+documentation: https://github.com/toure5013/mhj-maps
 
 topics:
   - maps
