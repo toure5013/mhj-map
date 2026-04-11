@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-04-11
+
+### Changed
+- Updated project metadata including homepage, repository links, and documentation URL.
+- Refactored icon usage (removed Lucide icons) to improve performance and reduce weight.
+- Improved markdown rendering logic in documentation components.
+- Updated pathing for relative deployment.
+
+## [1.2.0] - 2026-04-09
+
+### Changed
+- **Major Rebranding** — Renamed project from `Navigatr` to `MhjMaps`.
+- Updated all service implementations and internal references to reflect the new name.
+
+### Added
+- Launched premium documentation site.
+
+## [1.1.0] - 2026-04-07
+
+### Added
+- **Enhanced Markers** — Support for image and SVG markers.
+- **Advanced Controls** — Expanded `MhjMapsMapController` with circle overlays and advanced camera controls.
+- **New Themes** — Added 6 new premium map themes.
+- **Expanded Providers** — Support for more tile providers and custom tile URLs.
+- Introduced configurable default styles for markers and polylines.
+
+### Fixed
+- Improved null safety and API response parsing in `MhjMapsService`.
+- Added User-Agent headers to API requests to comply with usage policies.
+
 ## [1.0.0] - 2026-04-04
 
 ### Added
